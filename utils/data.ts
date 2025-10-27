@@ -1,0 +1,121 @@
+import { ParamValue } from "next/dist/server/request/params";
+import { InvoiceData } from "./interfaces/interfaces";
+
+export const invoiceTermsOptions = ["None", "Custom", "On Receipt", "Next Day", "2 Days","3 Days","4 Days","5 Days","6 Days","7 Days","10 Days","14 Days","21 Days","30 Days","45 Days","60 Days","90 Days","120 Days","180 Days","365 Days"] as const
+export type InvoiceTerms = typeof invoiceTermsOptions[number]
+
+export const taxCategoryOptions = ["On Total", "Deducted", "Per Item", "None"] as const
+export type TaxCategory = typeof taxCategoryOptions[number]
+
+export const discountCategoryOptions = ["None", "Percent", "Flat Amount"] as const
+export type DiscountCategory = typeof discountCategoryOptions[number]
+
+export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/
+export const MOBILE_NUMBER_REGEX = /^(?:\+1\s?)?(?:\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/
+export const PASSWORD_REGEX = /^.{8,}$/
+
+export const currencies = [
+  { name: "USD", symbol: "$" },
+  { name: "EUR", symbol: "€" },
+  { name: "CAD", symbol: "C$" },
+  { name: "AED", symbol: "د.إ" },
+  { name: "AOA", symbol: "Kz" },
+  { name: "ARS", symbol: "$" },
+  { name: "AUD", symbol: "A$" },
+  { name: "BBD", symbol: "Bds$" },
+  { name: "BDT", symbol: "৳" },
+  { name: "BHD", symbol: ".د.ب" },
+  { name: "BMD", symbol: "$" },
+  { name: "BND", symbol: "B$" },
+  { name: "BRL", symbol: "R$" },
+  { name: "BSD", symbol: "B$" },
+  { name: "BWP", symbol: "P" },
+  { name: "BZD", symbol: "BZ$" },
+  { name: "CDF", symbol: "FC" },
+  { name: "CHF", symbol: "CHF" },
+  { name: "CLP", symbol: "$" },
+  { name: "CNY", symbol: "¥" },
+  { name: "COP", symbol: "$" },
+  { name: "CZK", symbol: "Kč" },
+  { name: "DKK", symbol: "kr" },
+  { name: "DZD", symbol: "دج" },
+  { name: "EGP", symbol: "£" },
+  { name: "ETB", symbol: "Br" },
+  { name: "FJD", symbol: "FJ$" },
+  { name: "GHS", symbol: "₵" },
+  { name: "GBP", symbol: "£" },
+  { name: "HKD", symbol: "HK$" },
+  { name: "HUF", symbol: "Ft" },
+  { name: "IDR", symbol: "Rp" },
+  { name: "ILS", symbol: "₪" },
+  { name: "INR", symbol: "₹" },
+  { name: "JPY", symbol: "¥" },
+  { name: "KES", symbol: "Sh" },
+  { name: "KRW", symbol: "₩" },
+  { name: "KWD", symbol: "د.ك" },
+  { name: "LKR", symbol: "Rs" },
+  { name: "MAD", symbol: "د.م." },
+  { name: "MUR", symbol: "₨" },
+  { name: "MWK", symbol: "MK" },
+  { name: "MXN", symbol: "$" },
+  { name: "MYR", symbol: "RM" },
+  { name: "MZN", symbol: "MT" },
+  { name: "NGN", symbol: "₦" },
+  { name: "NOK", symbol: "kr" },
+  { name: "NPR", symbol: "Rs" },
+  { name: "NZD", symbol: "NZ$" },
+  { name: "OMR", symbol: "﷼" },
+  { name: "PEN", symbol: "S/" },
+  { name: "PHP", symbol: "₱" },
+  { name: "PKR", symbol: "₨" },
+  { name: "PLN", symbol: "zł" },
+  { name: "QAR", symbol: "﷼" },
+  { name: "RON", symbol: "lei" },
+  { name: "RUB", symbol: "₽" },
+  { name: "SAR", symbol: "﷼" },
+  { name: "SCR", symbol: "₨" },
+  { name: "SEK", symbol: "kr" },
+  { name: "SGD", symbol: "S$" },
+  { name: "THB", symbol: "฿" },
+  { name: "TND", symbol: "د.ت" },
+  { name: "TOP", symbol: "T$" },
+  { name: "TRY", symbol: "₺" },
+  { name: "TTD", symbol: "TT$" },
+  { name: "TWD", symbol: "NT$" },
+  { name: "TZS", symbol: "Sh" },
+  { name: "UGX", symbol: "USh" },
+  { name: "UYU", symbol: "$U" },
+  { name: "VND", symbol: "₫" },
+  { name: "VUV", symbol: "Vt" },
+  { name: "WST", symbol: "WS$" },
+  { name: "XAF", symbol: "FCFA" },
+  { name: "XOF", symbol: "CFA" },
+  { name: "XPF", symbol: "₣" },
+  { name: "ZAR", symbol: "R" },
+  { name: "ZMW", symbol: "ZK" }
+];
+
+export const defaultInvoiceData: InvoiceData = {
+  id: "" as ParamValue,
+  invoiceTitle: "",
+  fromName: "",
+  fromEmail: "",
+  fromAddress: "",
+  fromPhone: "",
+  fromBusiness: "",
+  billToName: "",
+  billToEmail: "",
+  billToAddress: "",
+  billToPhone: "",
+  billToMobile: "",
+  billToFax: "",
+  invoiceNumber: "",
+  date: new Date().toISOString().split("T")[0],
+  terms: "On Receipt" as InvoiceTerms,
+  lineItems: [],
+  subtotal: 0,
+  tax: 0,
+  total: 0,
+  balance: 0,
+  signatureUrl: ""
+};

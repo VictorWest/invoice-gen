@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  password  String
+}
+
+model Invoice {
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  invoiceId        String   @unique
+  invoiceTitle     String
+  fromName         String
+  fromEmail        String
+  fromAddress      String
+  fromPhone        String
+  fromBusiness     String?
+  billToName       String
+  billToEmail      String
+  billToAddress    String
+  billToPhone      String
+  billToMobile     String?
+  billToFax        String?
+  invoiceNumber    String
+  date             String
+  terms            String
+  lineItems        Json[]
+  taxData          Json
+  subtotal         Decimal
+  tax              Decimal
+  total            Decimal
+  balance          Decimal
+  signatureUrl     String
+  discountData     Json
+  templateColour   String
+  userEmail        String
+  selectedCurrency Json
+}
+
+model ImageUpload {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userEmail String
+  invoiceId String   @unique
+  url       String   @unique
+  fileId    String   @unique
+}

@@ -1,0 +1,251 @@
+.progressContainer {
+  width: 100%;
+  margin-bottom: 1rem;
+  background: rgba(0, 112, 243, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 6px;
+  background: linear-gradient(90deg, #0070f3, #00a3ff);
+  transition: width 0.3s ease-out;
+  border-radius: 3px;
+}
+
+.uploadProgress {
+  border: 1px solid rgba(0, 112, 243, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: rgba(0, 112, 243, 0.03);
+  backdrop-filter: blur(8px);
+}
+
+.uploadProgressHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.fileIcon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 112, 243, 0.08);
+  border-radius: 6px;
+  color: #0070f3;
+  font-size: 1rem;
+}
+
+.progressStats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.uploadStatus {
+  text-align: center;
+  padding: 1rem;
+}
+
+.uploadStatus.success {
+  color: #16a34a;
+}
+
+.uploadStatus.error {
+  color: #dc2626;
+}
+
+.restartButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+}
+
+.restartButton:hover {
+  background: #e5e5e5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .uploadProgress {
+    border-color: rgba(0, 112, 243, 0.2);
+    background: rgba(0, 112, 243, 0.05);
+  }
+
+  .fileIcon {
+    background: rgba(0, 112, 243, 0.15);
+    color: #3291ff;
+  }
+
+  .progressContainer {
+    background: rgba(0, 112, 243, 0.15);
+  }
+
+  .uploadProgressHeader {
+    color: #999;
+  }
+
+  .restartButton {
+    background: #262626;
+    color: #999;
+  }
+
+  .restartButton:hover {
+    background: #333;
+  }
+}
+
+.uploadArea {
+  padding: 2rem;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  text-align: center;
+  background: #fafafa;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.uploadArea.withProgress {
+  min-height: 320px;
+  transition: min-height 0.3s ease-out;
+}
+
+.uploadArea.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.uploadArea.disabled:hover {
+  border-color: #ccc;
+  background: #fafafa;
+}
+
+.uploadText {
+  margin: 0;
+  color: #666;
+}
+
+.uploadText span {
+  display: block;
+  margin: 0.25rem 0;
+  color: #999;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileInputLabel {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #0070f3;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.fileInputLabel:hover {
+  background: #0060df;
+}
+
+.fileInputLabel.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #999;
+}
+
+.fileInputLabel.disabled:hover {
+  background: #999;
+}
+
+.dropZoneContent {
+  padding: 2rem 4rem;
+  background: white;
+  border: 2px dashed #0070f3;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  color: #0070f3;
+}
+
+.dropZone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: rgba(0, 112, 243, 0.05);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadHint {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+.demoContainer {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.demoContainer h1 {
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #000033;
+}
+
+.demoLink {
+  display: block;
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 2px dashed #4285f4;
+  border-radius: 4px;
+  text-align: center;
+  color: #4285f4;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.demoLink:hover {
+  background: #4285f4;
+  color: white;
+}
+
+.homePage {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
