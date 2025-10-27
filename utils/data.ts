@@ -117,5 +117,6 @@ export const defaultInvoiceData: InvoiceData = {
   tax: 0,
   total: 0,
   balance: 0,
-  signatureUrl: ""
+  signatureUrl: "",
+  notes: ""
 };

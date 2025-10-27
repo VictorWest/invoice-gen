@@ -156,7 +156,8 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   discountData: 'discountData',
   templateColour: 'templateColour',
   userEmail: 'userEmail',
-  selectedCurrency: 'selectedCurrency'
+  selectedCurrency: 'selectedCurrency',
+  notes: 'notes'
 };
 
 exports.Prisma.ImageUploadScalarFieldEnum = {

@@ -24,6 +24,7 @@ export type InvoiceData = {
     total: number,
     balance: number,
     signatureUrl: string,
+    notes: string
 }
 
 export type LineItemType = {

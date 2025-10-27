@@ -54,9 +54,10 @@ export const InvoiceProvider = ({ children }: any) => {
                             total,
                             balance,
                             signatureUrl,
-                            templateColour } = data;
+                            templateColour,
+                            notes } = data;
                     setSelectedCurrency(selectedCurrency)
-                    setInvoiceData({ id: invoiceId, invoiceTitle, fromName, fromEmail, fromAddress, fromPhone, fromBusiness, billToName, billToEmail, billToAddress, billToPhone, billToMobile, billToFax, invoiceNumber, date, terms, lineItems, subtotal, tax, total, balance, signatureUrl})
+                    setInvoiceData({ id: invoiceId, invoiceTitle, fromName, fromEmail, fromAddress, fromPhone, fromBusiness, billToName, billToEmail, billToAddress, billToPhone, billToMobile, billToFax, invoiceNumber, date, terms, lineItems, subtotal, tax, total, balance, signatureUrl, notes})
                     setLineItems(lineItems)
                     setLineItemIndex(lineItems + 1)
                     setTaxData(taxData)
@@ -105,7 +106,9 @@ export const InvoiceProvider = ({ children }: any) => {
                 },
                 body: JSON.stringify({ selectedCurrency, invoiceData, lineItems, taxData, discountData, calculateTotal, templateColour })
             })
-            setHasSavedDocument(true)
+            if (response.ok){
+                setHasSavedDocument(true)
+            }
         } catch (error) {
             console.log(error)
         }

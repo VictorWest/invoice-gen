@@ -64,9 +64,9 @@ export default function PreviewInvoice(){
                     total,
                     balance,
                     signatureUrl,
-                    templateColour } = data;
+                    templateColour, notes } = data;
             setSelectedCurrency(selectedCurrency)
-            setInvoiceData({ id: invoiceId, invoiceTitle, fromName, fromEmail, fromAddress, fromPhone, fromBusiness, billToName, billToEmail, billToAddress, billToPhone, billToMobile, billToFax, invoiceNumber, date, terms, lineItems, subtotal, tax, total, balance, signatureUrl})
+            setInvoiceData({ id: invoiceId, invoiceTitle, fromName, fromEmail, fromAddress, fromPhone, fromBusiness, billToName, billToEmail, billToAddress, billToPhone, billToMobile, billToFax, invoiceNumber, date, terms, lineItems, subtotal, tax, total, balance, signatureUrl, notes})
             setLineItems(lineItems)
             setTaxData(taxData)
             setDiscountData(discountData)
@@ -159,6 +159,10 @@ export default function PreviewInvoice(){
                                 </div>
                             ))}
                         </div>
+                        <div className="space-y-3 text-sm">
+                            <h1 className="font-bold mb-5 text-sm">NOTES</h1>
+                            <p className="wrap-break-word whitespace-pre-wrap">{invoiceData?.notes}</p>
+                        </div>
                         <div className="flex flex-col items-end *:flex *:w-80 *:justify-between *:py-1">
                             <div>
                                 <p className="font-semibold text-sm">SUBTOTAL</p>
@@ -183,6 +187,12 @@ export default function PreviewInvoice(){
                                 </div>
                             </div>
                         </div>
+                        {invoiceData?.signatureUrl &&
+                            <div className="w-full flex flex-col justify-center items-center gap-2">
+                                <Image src={invoiceData?.signatureUrl} width={150} height={150} alt="Signature" />
+                                <p className="text-xs font-semibold">FOR: {invoiceData?.fromName}</p>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

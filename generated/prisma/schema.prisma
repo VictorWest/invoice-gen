@@ -45,6 +45,7 @@ model Invoice {
   templateColour   String
   userEmail        String
   selectedCurrency Json
+  notes            String
 }
 
 model ImageUpload {

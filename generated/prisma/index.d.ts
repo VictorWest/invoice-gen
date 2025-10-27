@@ -2113,6 +2113,7 @@ export namespace Prisma {
     signatureUrl: string | null
     templateColour: string | null
     userEmail: string | null
+    notes: string | null
   }
 
   export type InvoiceMaxAggregateOutputType = {
@@ -2141,6 +2142,7 @@ export namespace Prisma {
     signatureUrl: string | null
     templateColour: string | null
     userEmail: string | null
+    notes: string | null
   }
 
   export type InvoiceCountAggregateOutputType = {
@@ -2173,6 +2175,7 @@ export namespace Prisma {
     templateColour: number
     userEmail: number
     selectedCurrency: number
+    notes: number
     _all: number
   }
 
@@ -2219,6 +2222,7 @@ export namespace Prisma {
     signatureUrl?: true
     templateColour?: true
     userEmail?: true
+    notes?: true
   }
 
   export type InvoiceMaxAggregateInputType = {
@@ -2247,6 +2251,7 @@ export namespace Prisma {
     signatureUrl?: true
     templateColour?: true
     userEmail?: true
+    notes?: true
   }
 
   export type InvoiceCountAggregateInputType = {
@@ -2279,6 +2284,7 @@ export namespace Prisma {
     templateColour?: true
     userEmail?: true
     selectedCurrency?: true
+    notes?: true
     _all?: true
   }
 
@@ -2398,6 +2404,7 @@ export namespace Prisma {
     templateColour: string
     userEmail: string
     selectedCurrency: JsonValue
+    notes: string
     _count: InvoiceCountAggregateOutputType | null
     _avg: InvoiceAvgAggregateOutputType | null
     _sum: InvoiceSumAggregateOutputType | null
@@ -2449,6 +2456,7 @@ export namespace Prisma {
     templateColour?: boolean
     userEmail?: boolean
     selectedCurrency?: boolean
+    notes?: boolean
   }, ExtArgs["result"]["invoice"]>
 
   export type InvoiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2481,6 +2489,7 @@ export namespace Prisma {
     templateColour?: boolean
     userEmail?: boolean
     selectedCurrency?: boolean
+    notes?: boolean
   }, ExtArgs["result"]["invoice"]>
 
   export type InvoiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2513,6 +2522,7 @@ export namespace Prisma {
     templateColour?: boolean
     userEmail?: boolean
     selectedCurrency?: boolean
+    notes?: boolean
   }, ExtArgs["result"]["invoice"]>
 
   export type InvoiceSelectScalar = {
@@ -2545,9 +2555,10 @@ export namespace Prisma {
     templateColour?: boolean
     userEmail?: boolean
     selectedCurrency?: boolean
+    notes?: boolean
   }
 
-  export type InvoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "invoiceId" | "invoiceTitle" | "fromName" | "fromEmail" | "fromAddress" | "fromPhone" | "fromBusiness" | "billToName" | "billToEmail" | "billToAddress" | "billToPhone" | "billToMobile" | "billToFax" | "invoiceNumber" | "date" | "terms" | "lineItems" | "taxData" | "subtotal" | "tax" | "total" | "balance" | "signatureUrl" | "discountData" | "templateColour" | "userEmail" | "selectedCurrency", ExtArgs["result"]["invoice"]>
+  export type InvoiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "invoiceId" | "invoiceTitle" | "fromName" | "fromEmail" | "fromAddress" | "fromPhone" | "fromBusiness" | "billToName" | "billToEmail" | "billToAddress" | "billToPhone" | "billToMobile" | "billToFax" | "invoiceNumber" | "date" | "terms" | "lineItems" | "taxData" | "subtotal" | "tax" | "total" | "balance" | "signatureUrl" | "discountData" | "templateColour" | "userEmail" | "selectedCurrency" | "notes", ExtArgs["result"]["invoice"]>
 
   export type $InvoicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Invoice"
@@ -2582,6 +2593,7 @@ export namespace Prisma {
       templateColour: string
       userEmail: string
       selectedCurrency: Prisma.JsonValue
+      notes: string
     }, ExtArgs["result"]["invoice"]>
     composites: {}
   }
@@ -3034,6 +3046,7 @@ export namespace Prisma {
     readonly templateColour: FieldRef<"Invoice", 'String'>
     readonly userEmail: FieldRef<"Invoice", 'String'>
     readonly selectedCurrency: FieldRef<"Invoice", 'Json'>
+    readonly notes: FieldRef<"Invoice", 'String'>
   }
     
 
@@ -4495,7 +4508,8 @@ export namespace Prisma {
     discountData: 'discountData',
     templateColour: 'templateColour',
     userEmail: 'userEmail',
-    selectedCurrency: 'selectedCurrency'
+    selectedCurrency: 'selectedCurrency',
+    notes: 'notes'
   };
 
   export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
@@ -4734,6 +4748,7 @@ export namespace Prisma {
     templateColour?: StringFilter<"Invoice"> | string
     userEmail?: StringFilter<"Invoice"> | string
     selectedCurrency?: JsonFilter<"Invoice">
+    notes?: StringFilter<"Invoice"> | string
   }
 
   export type InvoiceOrderByWithRelationInput = {
@@ -4766,6 +4781,7 @@ export namespace Prisma {
     templateColour?: SortOrder
     userEmail?: SortOrder
     selectedCurrency?: SortOrder
+    notes?: SortOrder
   }
 
   export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
@@ -4801,6 +4817,7 @@ export namespace Prisma {
     templateColour?: StringFilter<"Invoice"> | string
     userEmail?: StringFilter<"Invoice"> | string
     selectedCurrency?: JsonFilter<"Invoice">
+    notes?: StringFilter<"Invoice"> | string
   }, "id" | "invoiceId">
 
   export type InvoiceOrderByWithAggregationInput = {
@@ -4833,6 +4850,7 @@ export namespace Prisma {
     templateColour?: SortOrder
     userEmail?: SortOrder
     selectedCurrency?: SortOrder
+    notes?: SortOrder
     _count?: InvoiceCountOrderByAggregateInput
     _avg?: InvoiceAvgOrderByAggregateInput
     _max?: InvoiceMaxOrderByAggregateInput
@@ -4873,6 +4891,7 @@ export namespace Prisma {
     templateColour?: StringWithAggregatesFilter<"Invoice"> | string
     userEmail?: StringWithAggregatesFilter<"Invoice"> | string
     selectedCurrency?: JsonWithAggregatesFilter<"Invoice">
+    notes?: StringWithAggregatesFilter<"Invoice"> | string
   }
 
   export type ImageUploadWhereInput = {
@@ -5009,6 +5028,7 @@ export namespace Prisma {
     templateColour: string
     userEmail: string
     selectedCurrency: JsonNullValueInput | InputJsonValue
+    notes: string
   }
 
   export type InvoiceUncheckedCreateInput = {
@@ -5041,6 +5061,7 @@ export namespace Prisma {
     templateColour: string
     userEmail: string
     selectedCurrency: JsonNullValueInput | InputJsonValue
+    notes: string
   }
 
   export type InvoiceUpdateInput = {
@@ -5072,6 +5093,7 @@ export namespace Prisma {
     templateColour?: StringFieldUpdateOperationsInput | string
     userEmail?: StringFieldUpdateOperationsInput | string
     selectedCurrency?: JsonNullValueInput | InputJsonValue
+    notes?: StringFieldUpdateOperationsInput | string
   }
 
   export type InvoiceUncheckedUpdateInput = {
@@ -5104,6 +5126,7 @@ export namespace Prisma {
     templateColour?: StringFieldUpdateOperationsInput | string
     userEmail?: StringFieldUpdateOperationsInput | string
     selectedCurrency?: JsonNullValueInput | InputJsonValue
+    notes?: StringFieldUpdateOperationsInput | string
   }
 
   export type InvoiceCreateManyInput = {
@@ -5136,6 +5159,7 @@ export namespace Prisma {
     templateColour: string
     userEmail: string
     selectedCurrency: JsonNullValueInput | InputJsonValue
+    notes: string
   }
 
   export type InvoiceUpdateManyMutationInput = {
@@ -5167,6 +5191,7 @@ export namespace Prisma {
     templateColour?: StringFieldUpdateOperationsInput | string
     userEmail?: StringFieldUpdateOperationsInput | string
     selectedCurrency?: JsonNullValueInput | InputJsonValue
+    notes?: StringFieldUpdateOperationsInput | string
   }
 
   export type InvoiceUncheckedUpdateManyInput = {
@@ -5199,6 +5224,7 @@ export namespace Prisma {
     templateColour?: StringFieldUpdateOperationsInput | string
     userEmail?: StringFieldUpdateOperationsInput | string
     selectedCurrency?: JsonNullValueInput | InputJsonValue
+    notes?: StringFieldUpdateOperationsInput | string
   }
 
   export type ImageUploadCreateInput = {
@@ -5473,6 +5499,7 @@ export namespace Prisma {
     templateColour?: SortOrder
     userEmail?: SortOrder
     selectedCurrency?: SortOrder
+    notes?: SortOrder
   }
 
   export type InvoiceAvgOrderByAggregateInput = {
@@ -5509,6 +5536,7 @@ export namespace Prisma {
     signatureUrl?: SortOrder
     templateColour?: SortOrder
     userEmail?: SortOrder
+    notes?: SortOrder
   }
 
   export type InvoiceMinOrderByAggregateInput = {
@@ -5537,6 +5565,7 @@ export namespace Prisma {
     signatureUrl?: SortOrder
     templateColour?: SortOrder
     userEmail?: SortOrder
+    notes?: SortOrder
   }
 
   export type InvoiceSumOrderByAggregateInput = {

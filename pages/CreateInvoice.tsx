@@ -392,7 +392,7 @@ export default function CreateInvoice(){
                         </div>
                         <div className="space-y-3">
                             <h2 className="text-lg font-bold">Notes</h2>
-                            <textarea className="border border-stone-400 rounded-md w-full h-20 resize-none outline-0 p-1"></textarea>
+                            <textarea value={invoiceData?.notes} onChange={(e) => setInvoiceData((prev: any) => ({...prev, notes: e.target.value}))} className="border border-stone-400 rounded-md w-full h-20 resize-none outline-0 p-1"></textarea>
                         </div>
                         <div className="flex items-center gap-2">
                             <h2 className="text-lg font-bold">Signature</h2>
