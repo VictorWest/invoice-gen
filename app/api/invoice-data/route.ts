@@ -16,7 +16,7 @@ export async function POST(req: NextRequest){
 
     const { selectedCurrency, invoiceData, lineItems, taxData, discountData, calculateTotal, templateColour } = await req.json()
 
-    const { id, invoiceTitle, fromName, fromEmail, fromAddress, fromPhone, 
+    const { invoiceId, invoiceTitle, fromName, fromEmail, fromAddress, fromPhone, 
         fromBusiness, billToName, billToEmail, billToAddress, billToPhone, billToMobile, 
         billToFax, invoiceNumber, date, terms, signatureUrl,notes } = invoiceData
 
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest){
     const data = {
                 userEmail: session?.user?.email || '',
                 selectedCurrency: selectedCurrency,
-                invoiceId: id,
+                invoiceId,
                 invoiceTitle,
                 fromName,
                 fromEmail,
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest){
             await prisma.invoice.update({
                 where: {
                     userEmail: session?.user?.email,
-                    invoiceId: id
+                    invoiceId
                 }, 
                 data
             })

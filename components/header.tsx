@@ -9,7 +9,7 @@ export default function Header({ isHome }:{ isHome?: boolean }){
     const { session } = UseInvoiceContext()
 
     return(
-        <header className="flex items-center justify-between *:w-70 px-10 py-5 w-full fixed top-0 bg-black/90">
+        <header className="flex items-center justify-between *:w-70 px-10 py-5 w-full fixed top-0 bg-black/90 z-10">
             <Link href={homePageRoute} className="font-bold text-xl">InvoiceGen</Link>
             {isHome && <div className="flex items-center gap-5 text-sm text-stone-200 *:border-b *:border-black *:hover:border-white *:cursor-pointer"> 
                 <p>Generate Invoice</p>

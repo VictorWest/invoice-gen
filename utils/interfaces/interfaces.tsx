@@ -1,8 +1,6 @@
 import { DiscountCategory, InvoiceTerms, TaxCategory } from "@/utils/data"
-import { ParamValue } from "next/dist/server/request/params"
 
 export type InvoiceData = {
-    id: ParamValue,
     invoiceTitle: string,
     fromName: string,
     fromEmail: string,
@@ -16,6 +14,7 @@ export type InvoiceData = {
     billToMobile?: string,
     billToFax?: string,
     invoiceNumber: string,
+    invoiceId: string,
     date: string,
     terms: InvoiceTerms,
     lineItems: LineItemType[],

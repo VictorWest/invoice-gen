@@ -96,7 +96,7 @@ export const currencies = [
 ];
 
 export const defaultInvoiceData: InvoiceData = {
-  id: "" as ParamValue,
+  invoiceId: "",
   invoiceTitle: "",
   fromName: "",
   fromEmail: "",

@@ -57,7 +57,7 @@ export default function CreateInvoice(){
     const [ showCurrencyList, setShowCurrencyList ] = useState(false)
     
     useEffect(() => {
-        setInvoiceData((prev: any) => ({...prev, id}))
+        setInvoiceData((prev: any) => ({...prev, invoiceId: id}))
     }, [])
 
     useEffect(() => {

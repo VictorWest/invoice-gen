@@ -23,9 +23,9 @@ export const InvoiceProvider = ({ children }: any) => {
     const [ hasSavedDocument, setHasSavedDocument ] = useState(false)
 
     useEffect(() => {
-        if (invoiceData?.id){
+        if (invoiceData?.invoiceId){
             (async () => {
-                const response = await fetch(`/api/invoice-data/${invoiceData?.id}`)
+                const response = await fetch(`/api/invoice-data/${invoiceData?.invoiceId}`)
     
                 if (response.ok){
                     const data = await response.json()
@@ -57,7 +57,7 @@ export const InvoiceProvider = ({ children }: any) => {
                             templateColour,
                             notes } = data;
                     setSelectedCurrency(selectedCurrency)
-                    setInvoiceData({ id: invoiceId, invoiceTitle, fromName, fromEmail, fromAddress, fromPhone, fromBusiness, billToName, billToEmail, billToAddress, billToPhone, billToMobile, billToFax, invoiceNumber, date, terms, lineItems, subtotal, tax, total, balance, signatureUrl, notes})
+                    setInvoiceData({ invoiceId, invoiceTitle, fromName, fromEmail, fromAddress, fromPhone, fromBusiness, billToName, billToEmail, billToAddress, billToPhone, billToMobile, billToFax, invoiceNumber, date, terms, lineItems, subtotal, tax, total, balance, signatureUrl, notes})
                     setLineItems(lineItems)
                     setLineItemIndex(lineItems + 1)
                     setTaxData(taxData)
@@ -67,12 +67,12 @@ export const InvoiceProvider = ({ children }: any) => {
                 }
             })()
         }
-    }, [invoiceData?.id])
+    }, [invoiceData?.invoiceId])
 
     useEffect(() => {
         (async () => {
-            if (invoiceData?.id){
-                const response = await fetch(`/api/image-upload/${invoiceData?.id}`)
+            if (invoiceData?.invoiceId){
+                const response = await fetch(`/api/image-upload/${invoiceData?.invoiceId}`)
 
                 if (response.ok){
                     const { imageToDisplay } = await response.json()
@@ -81,7 +81,7 @@ export const InvoiceProvider = ({ children }: any) => {
                 }
             }
         })()
-    }, [invoiceData?.id])
+    }, [invoiceData?.invoiceId])
     
     const handleSaveImageToDB = async (data: UploadedImage) => {
         try {
