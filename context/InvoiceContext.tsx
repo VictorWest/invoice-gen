@@ -1,5 +1,6 @@
 "use client"
 import { defaultInvoiceData } from "@/utils/data";
+import { generatePDF } from "@/utils/helpers";
 import { DiscountData, InvoiceData, LineItemType, TaxData, UploadedImage } from "@/utils/interfaces/interfaces";
 import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -21,6 +22,10 @@ export const InvoiceProvider = ({ children }: any) => {
     // UX State Management
     const [ lineItemIndex, setLineItemIndex ] = useState(1)
     const [ hasSavedDocument, setHasSavedDocument ] = useState(false)
+    const [ isDeleteModalOpen, setIsDeleteModalOpen ] = useState(false);
+
+    const openDeleteModal = () => setIsDeleteModalOpen(true);
+    const closeDeleteModal = () => setIsDeleteModalOpen(false);
 
     useEffect(() => {
         if (invoiceData?.invoiceId){
@@ -114,6 +119,10 @@ export const InvoiceProvider = ({ children }: any) => {
         }
     }
 
+    const handleSaveAsPDF = (invoiceData: InvoiceData, lineItems: LineItemType[], selectedCurrency: any, discountData: DiscountData, taxData: TaxData, uploadedImage: UploadedImage, templateColour: string) => {
+        // Premium will be added
+        generatePDF(invoiceData, lineItems, selectedCurrency, discountData, taxData, uploadedImage, templateColour)
+    }
     return(
         <InvoiceContext.Provider value={{ 
                                             session,
@@ -128,7 +137,11 @@ export const InvoiceProvider = ({ children }: any) => {
                                             templateColour, setTemplateColour,
                                             handleSaveChangesToDB,
                                             handleSaveImageToDB,
-                                            hasSavedDocument
+                                            handleSaveAsPDF,
+                                            hasSavedDocument,
+                                            isDeleteModalOpen, setIsDeleteModalOpen,
+                                            openDeleteModal,
+                                            closeDeleteModal
                                         }}>
             { children }
         </InvoiceContext.Provider>

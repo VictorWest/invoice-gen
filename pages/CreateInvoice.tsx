@@ -206,7 +206,7 @@ export default function CreateInvoice(){
     };
 
     return (
-        <Providers>
+        <>
             <Header />
             <div className="mt-20 bg-stone-100 px-15 py-10 text-black flex gap-10 relative">
                 <div className="w-3/4">
@@ -543,6 +543,6 @@ export default function CreateInvoice(){
                     </div>
                 </div>
             </div>
-        </Providers>
+        </>
     )
 }

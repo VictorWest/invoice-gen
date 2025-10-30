@@ -10,6 +10,8 @@ import { InvoiceData } from "@/utils/interfaces/interfaces";
 import { formatCurrency, formatDateDayMonth } from "@/utils/helpers";
 import Link from "next/link";
 import { invoicePageRoute } from "@/utils/routeMap";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import InvoiceOptions from "@/components/invoice-options";
 
 export default function InvoicePage(){
     const router = useRouter();
@@ -18,7 +20,8 @@ export default function InvoicePage(){
         router.replace(`/invoices/${id}/edit`)
     }
 
-    const [ invoices, setInvoices ] = useState<InvoiceData[]>([])
+    const [ invoices, setInvoices ] = useState<any[]>([]) 
+    const [ showInvoiceOptions, setShowInvoiceOptions ] = useState<string>()
 
     useEffect(() => {
         (async() => {
@@ -26,13 +29,14 @@ export default function InvoicePage(){
 
             if (response.ok){
                 const { data } = await response.json()
+                console.log(data)
                 setInvoices(data)
             }
         })()
     }, [])
 
     return(
-        <Providers>
+        <>
             <Header />
             <div className="mt-20 bg-stone-100 px-20 py-10 text-black h-screen">
                 <div className="flex justify-between items-center">
@@ -56,12 +60,16 @@ export default function InvoicePage(){
                                 <p className="flex-1">Balance Due</p>
                             </div>
                             {invoices?.map(item => (
-                                <Link key={item.invoiceId} href={`${invoicePageRoute}/${item.invoiceId}/preview`} className="hover:bg-stone-100 cursor-pointer">
-                                    <p className="flex-1">{item.invoiceNumber}</p>
-                                    <p className="flex-4">{item.billToName}</p>
-                                    <p className="flex-1">{formatDateDayMonth(item.date)}</p>
-                                    <p className="flex-1">{formatCurrency(item.balance)}</p>
-                                </Link>
+                                <div key={item.invoiceId} className="relative">
+                                    <Link href={`${invoicePageRoute}/${item.invoiceId}/preview`} className="w-full flex justify-between text-start p-2 hover:bg-stone-100 cursor-pointer">
+                                        <p className="flex-1">{item.invoiceNumber}</p>
+                                        <p className="flex-4">{item.billToName}</p>
+                                        <p className="flex-1">{formatDateDayMonth(item.date)}</p>
+                                        <p className="flex-1">{formatCurrency(item.balance)}</p>
+                                    </Link>
+                                    <div onClick={() => setShowInvoiceOptions(prev => prev === item.invoiceId ? "" : item.invoiceId)} className="absolute top-1/2 -translate-y-1/2 -right-3 cursor-pointer"><BsThreeDotsVertical /></div>
+                                    {showInvoiceOptions === item.invoiceId && <div className="absolute top-10 -right-10 z-10"><InvoiceOptions invoiceData={item} /></div>}
+                                </div>
                             ))}
                         </div>
                     :
@@ -73,6 +81,6 @@ export default function InvoicePage(){
                     }
                 </div>
             </div>
-        </Providers>
+        </>
     )
 }

@@ -14,6 +14,9 @@ import Link from "next/link";
 import { defaultInvoiceData, EMAIL_REGEX } from "@/utils/data";
 import Input from "@/components/input";
 import { sendInvoiceEmail } from "@/utils/resend";
+import DeleteModal from "@/components/delete-modal";
+import ConfirmDelete from "@/components/confirm-delete";
+import { UseInvoiceContext } from "@/context/InvoiceContext";
 
 export default function PreviewInvoice(){
     const params = useParams()
@@ -25,6 +28,8 @@ export default function PreviewInvoice(){
             router.replace(invoicePageRoute)
         }
     }, [id, router])
+
+    const { handleSaveAsPDF, isDeleteModalOpen, openDeleteModal, closeDeleteModal } = UseInvoiceContext()
 
     const [ selectedCurrency, setSelectedCurrency ] = useState({ name: "USD", symbol: "$" })
     const [ invoiceData, setInvoiceData ] = useState<InvoiceData>(defaultInvoiceData)
@@ -38,7 +43,8 @@ export default function PreviewInvoice(){
     // UX State Management
     const [ sendToEmailIsActive, setSendToEmailIsActive ] = useState(false)
     const [ inputIsInvalid, setInputIsInvalid ] = useState(false)
-    const [ error, setError ] = useState("")
+    const [ error, setError ] = useState("")     
+    const [ emailSendIsLoading, setEmailSendIsLoading ] = useState(false) 
 
     useEffect(() => {
         (async () => {
@@ -109,25 +115,27 @@ export default function PreviewInvoice(){
 
     const invoiceRef = useRef<HTMLDivElement | null>(null)
 
-    const handleSaveAsPDF = () => {
-        // Premium will be added
-        generatePDF(invoiceData, lineItems, selectedCurrency, discountData, taxData, uploadedImage, templateColour)
-    }
-
     const handleSendEmail = async () => {
         if (!EMAIL_REGEX.test(emailToSend)){
             setError("Please give a correct email")
         } else {
-            setError("")
-            const data = await generatePDF(invoiceData, lineItems, selectedCurrency, discountData, taxData, uploadedImage, templateColour, true)
-            if (data?.filename && data?.buffer){
-                sendInvoiceEmail(emailToSend, invoiceData, selectedCurrency, data?.filename, data?.buffer)
+            try {
+                setEmailSendIsLoading(true)
+                setError("")
+                const data = await generatePDF(invoiceData, lineItems, selectedCurrency, discountData, taxData, uploadedImage, templateColour, true)
+                if (data?.filename && data?.base64){
+                    sendInvoiceEmail(emailToSend, invoiceData, selectedCurrency, data?.filename, data?.base64)
+                }
+            } catch (error) {
+                console.log(error)
+            } finally { 
+                setEmailSendIsLoading(false)
             }
         }
     }
 
     return(
-        <Providers>
+        <>
             <Header />
             <div className={`mt-20 bg-stone-100 text-black ${sendToEmailIsActive && "flex"}`}>
                 <div className={`${sendToEmailIsActive && "w-3/4"}`}>
@@ -135,7 +143,7 @@ export default function PreviewInvoice(){
                         <div className="flex justify-between w-[210mm] pt-5">
                             <Link href={`${invoicePageRoute}/${invoiceData?.invoiceId}/edit`}><Button bgColour="#e7e5e4" title="Edit" className="border border-stone-300" /></Link>
                             <div className="flex items-center gap-5">
-                                <div onClick={handleSaveAsPDF}><Button bgColour="#e7e5e4" title="PDF" className="border border-stone-300" /></div>
+                                <div onClick={() => handleSaveAsPDF(invoiceData, lineItems, selectedCurrency, discountData, taxData, uploadedImage, templateColour)}><Button bgColour="#e7e5e4" title="PDF" className="border border-stone-300" /></div>
                                 <div onClick={() => setSendToEmailIsActive(true)}><Button bgColour="#000" textColour="#e7e5e4" title="Email Invoice" className="border border-stone-300" /></div>
                             </div>
                         </div>
@@ -245,11 +253,14 @@ export default function PreviewInvoice(){
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-center gap-5 pb-20">
+                    <div className="relative flex justify-center gap-5 pb-20">
                         <div className="w-[210mm] flex justify-between">
-                            <Button bgColour="#e7e5e4" title="Close Invoice" className="border border-stone-300" />
-                            <Button bgColour="#991B1B" textColour="#fff" title="Delete Invoice" className="" />
+                            <div onClick={() => router.push(invoicePageRoute)}><Button bgColour="#e7e5e4" title="Close Invoice" className="border border-stone-300" /></div>
+                            <div onClick={openDeleteModal}><Button bgColour="#991B1B" textColour="#fff" title="Delete Invoice" className="" /></div>
                         </div>
+                        <DeleteModal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
+                            <ConfirmDelete onClose={closeDeleteModal} invoiceId={invoiceData?.invoiceId} />
+                        </DeleteModal>
                     </div>
                 </div>
                 {sendToEmailIsActive && <div className="w-1/4 mt-20 mr-10 space-y-5">
@@ -266,9 +277,9 @@ export default function PreviewInvoice(){
                         />
                         <p className="text-xs text-red-600">{error}</p>
                     </div>
-                    <div onClick={handleSendEmail}><Button bgColour="#000" textColour="#e7e5e4" title={<p className="w-full flex justify-center items-center font-bold">Send</p>} className="border border-stone-300 " /></div>
+                    <div onClick={handleSendEmail}><Button isLoading={emailSendIsLoading} bgColour="#000" textColour="#e7e5e4" title={<p className="w-full flex justify-center items-center font-bold">Send</p>} className="border border-stone-300 " /></div>
                 </div>}
             </div>
-        </Providers>
+        </>
     )
 }

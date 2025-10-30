@@ -35,3 +35,30 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         await prisma.$disconnect()
     }
 }
+
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }){
+    const session = await getServerSession()
+    if (!session?.user?.email) return NextResponse.json({message: "User not found"}, { status: 400})
+
+    const { id } = await params
+
+    try {
+        const response = await prisma.invoice.delete({
+            where: {
+                userEmail: session?.user?.email,
+                invoiceId: id
+            }
+        })
+
+        if (response){
+            return NextResponse.json({ message: "Deleted successfully" }, { status: 200 })
+        }
+        
+        return NextResponse.json({message: "Invoice not found"}, { status: 400 })
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json({message: "There was an error"}, { status: 500 })
+    } finally {
+        await prisma.$disconnect()
+    }
+}

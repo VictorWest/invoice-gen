@@ -10,8 +10,8 @@ export const sendInvoiceEmail = async (email: string, invoiceData: InvoiceData, 
     try {
         const { data, error } = await resend.emails.send({
             to: email,
-            from: "Merchly <customerservice@merchlyach.com>",
-            subject: "OTP Request - Merchly Support Team",
+            from: "InvoiceGen <customerservice@merchlyach.com>",
+            subject: "Notice of Invoice",
             react: await EmailTemplate({ 
                 billToName: invoiceData?.billToName,
                 companyName: invoiceData?.fromBusiness || invoiceData?.fromName,
@@ -31,6 +31,8 @@ export const sendInvoiceEmail = async (email: string, invoiceData: InvoiceData, 
 
         if (error) {
             console.log("Email error:", error)
+        } else {
+            console.log("Email sent")
         }
         
         return {data, error}        

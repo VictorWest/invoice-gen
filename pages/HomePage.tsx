@@ -38,11 +38,11 @@ export default async function HomePage(){
                 </div>
                 <div className="my-30 space-y-30 *:w-full *:flex *:justify-center *:gap-20">
                     <div>
-                        <div className="flex flex-col justify-between bg-[#BCADF9] text-black text-4xl px-5 py-9 w-[32rem] h-[19rem] rounded-4xl">
+                        <div className="flex flex-col justify-between bg-[#BCADF9] text-black text-4xl px-5 py-9 w-lg h-76 rounded-4xl">
                             <FaFileInvoice className="text-5xl" />
                             <p>Why Choose Our <span className="font-bold">Invoice Generator?</span></p>
                         </div>
-                        <div className="w-[30rem] *:flex *:flex-col *:items-start *:justify-center space-y-3 my-auto">
+                        <div className="w-120 *:flex *:flex-col *:items-start *:justify-center space-y-3 my-auto">
                             <div>
                                 <span className="font-bold">1. Quick & Easy</span>
                                 <p>Create invoices instantly with our intuitive editor — no templates to wrestle with.</p>
@@ -63,7 +63,7 @@ export default async function HomePage(){
                     </div>
 
                     <div className="">
-                        <div className="w-[30rem] *:flex *:flex-col *:items-end *:justify-center space-y-3 my-auto">
+                        <div className="w-120 *:flex *:flex-col *:items-end *:justify-center space-y-3 my-auto">
                             <div>
                                 <span className="font-bold">1. Enter Your Details</span>
                                 <p>Add your company, client, and invoice info.</p>
@@ -77,7 +77,7 @@ export default async function HomePage(){
                                 <p>Export a professional PDF or share via link.</p>
                             </div>
                         </div>
-                        <div className="flex flex-col justify-between bg-[#2AC9A3] text-black text-4xl px-5 py-9 w-[32rem] h-[19rem] rounded-4xl">
+                        <div className="flex flex-col justify-between bg-[#2AC9A3] text-black text-4xl px-5 py-9 w-lg h-76 rounded-4xl">
                             <MdCallToAction className="text-5xl" />
                             <p>Create Your Invoice in <span className="font-bold">3 Simple Steps</span></p>
                         </div>
