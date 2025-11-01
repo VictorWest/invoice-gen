@@ -21,7 +21,10 @@ export default function InvoicePage(){
     }
 
     const [ invoices, setInvoices ] = useState<any[]>([]) 
+    const [ invoicesToShow, setInvoicesToShow ] = useState(invoices)
     const [ showInvoiceOptions, setShowInvoiceOptions ] = useState<string>()
+
+    const [ searchInput, setSearchInput ] = useState("")
 
     useEffect(() => {
         (async() => {
@@ -29,11 +32,15 @@ export default function InvoicePage(){
 
             if (response.ok){
                 const { data } = await response.json()
-                console.log(data)
                 setInvoices(data)
+                setInvoicesToShow(data)
             }
         })()
     }, [])
+
+    useEffect(() => {
+        setInvoicesToShow(invoices.filter((item: any) => item.billToName.toLowerCase().includes(searchInput.toLowerCase()) || item.invoiceNumber.includes(searchInput)))
+    }, [searchInput, invoices])
 
     return(
         <>
@@ -46,7 +53,7 @@ export default function InvoicePage(){
                         <Button bgColour="#e7e5e4" title="Paid" className="border border-stone-300" />
                     </div>
                     <div className="flex items-center gap-5">
-                        <input className="px-2 py-3 bg-stone-200 rounded-md border-0 outline-0 text-xs" placeholder="Search by client name" />
+                        <input onChange={(e) =>setSearchInput(e.target.value)} value={searchInput} className="px-2 py-3 bg-stone-200 rounded-md border-0 outline-0 text-xs" placeholder="Search by client name" />
                         <div onClick={createNewInvoice}><Button textColour="white" bgColour="black" title="New Invoice" /></div>
                     </div>
                 </div>
@@ -59,7 +66,7 @@ export default function InvoicePage(){
                                 <p className="flex-1">Date</p>
                                 <p className="flex-1">Balance Due</p>
                             </div>
-                            {invoices?.map(item => (
+                            {invoicesToShow?.map(item => (
                                 <div key={item.invoiceId} className="relative">
                                     <Link href={`${invoicePageRoute}/${item.invoiceId}/preview`} className="w-full flex justify-between text-start p-2 hover:bg-stone-100 cursor-pointer">
                                         <p className="flex-1">{item.invoiceNumber}</p>

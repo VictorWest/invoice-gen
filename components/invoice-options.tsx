@@ -17,6 +17,8 @@ export default function InvoiceOptions({ invoiceData } : { invoiceData: any }){
     return (
         <>
             <div className="*:flex *:items-center *:gap-1 *:cursor-pointer *:hover:opacity-75 uppercase border border-stone-300 py-2 bg-white w-25 space-y-2 shadow-lg flex flex-col items-center justify-center text-xs rounded-lg">
+                <Link href={`${invoicePageRoute}/${invoiceData.invoiceId}/edit`}>Edit</Link>
+                <hr className="border border-stone-200 w-full" />
                 <Link href={`${invoicePageRoute}/${invoiceData.invoiceId}/preview`}>Preview</Link>
                 <hr className="border border-stone-200 w-full" />
                 <p onClick={() => handleSaveAsPDF(originalInvoiceData, lineItems, selectedCurrency, discountData, taxData, uploadedImage, templateColour)}>

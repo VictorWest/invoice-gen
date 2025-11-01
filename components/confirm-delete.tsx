@@ -19,7 +19,7 @@ export default function ConfirmDelete({ onClose, invoiceId }: { onClose: any, in
 
             if (response.ok){
                 onClose()
-                router.refresh()
+                window.location.reload()
             }
         } catch (error) {
             console.log(error)

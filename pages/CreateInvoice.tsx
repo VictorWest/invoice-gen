@@ -410,6 +410,7 @@ export default function CreateInvoice(){
                         </div> */}
                     </div>
                     <div className="flex justify-end gap-5 items-center py-5 text-sm">
+                        <Link href={invoicePageRoute} className="mr-auto"><Button bgColour="#E8E9ED" title="Back to Invoices" className="border border-stone-300" /></Link>
                         <div  onClick={handleSaveChangesToDB}>
                             <Button bgColour="#E8E9ED" title="Save Changes" className="border border-stone-300" />
                         </div>

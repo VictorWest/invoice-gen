@@ -9,14 +9,16 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  email     String   @unique
-  password  String
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now())
+  email        String        @unique
+  password     String
+  subscription Subscription?
+  updatedAt    DateTime?     @updatedAt
 }
 
 model Invoice {
-  id               Int      @id @default(autoincrement())
+  id               String   @id @default(uuid())
   createdAt        DateTime @default(now())
   invoiceId        String   @unique
   invoiceTitle     String
@@ -49,10 +51,34 @@ model Invoice {
 }
 
 model ImageUpload {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   userEmail String
   invoiceId String   @unique
   url       String   @unique
   fileId    String   @unique
+}
+
+model Subscription {
+  id        String             @id @default(uuid())
+  userId    String             @unique
+  user      User               @relation(fields: [userId], references: [id])
+  plan      PlanStatus
+  status    SubscriptionStatus
+  startDate DateTime
+  endDate   DateTime?
+  renewedAt DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELED
+}
+
+enum PlanStatus {
+  MONTHLY
+  ANNUAL
 }

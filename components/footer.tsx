@@ -1,13 +1,14 @@
+"use client"
 import Link from "next/link";
 import Button from "./button";
 import { FaFacebook, FaLinkedin, FaTwitter ,FaYoutube } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import { loginPageRoute, registerPageRoute } from "@/utils/routeMap";
-import { getServerSession } from "next-auth";
 import Logout from "./logout";
+import { useSession } from "next-auth/react";
 
-export default async function Footer(){
-    const session = await getServerSession()
+export default function Footer(){
+    const { data: session } = useSession()
 
     return (
         <div className="bg-[#FFFFFF] h-72 text-black p-10 relative">

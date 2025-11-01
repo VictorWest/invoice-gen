@@ -96,7 +96,8 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.InvoiceScalarFieldEnum = {
@@ -141,6 +142,18 @@ exports.Prisma.ImageUploadScalarFieldEnum = {
   fileId: 'fileId'
 };
 
+exports.Prisma.SubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  renewedAt: 'renewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -155,22 +168,32 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
-};
-
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  CANCELED: 'CANCELED'
+};
+
+exports.PlanStatus = exports.$Enums.PlanStatus = {
+  MONTHLY: 'MONTHLY',
+  ANNUAL: 'ANNUAL'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Invoice: 'Invoice',
-  ImageUpload: 'ImageUpload'
+  ImageUpload: 'ImageUpload',
+  Subscription: 'Subscription'
 };
 /**
  * Create the Client
@@ -219,13 +242,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"PRISMA_DATABASE_URL\")\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  createdAt DateTime @default(now())\n  email     String   @unique\n  password  String\n}\n\nmodel Invoice {\n  id               Int      @id @default(autoincrement())\n  createdAt        DateTime @default(now())\n  invoiceId        String   @unique\n  invoiceTitle     String\n  fromName         String\n  fromEmail        String\n  fromAddress      String\n  fromPhone        String\n  fromBusiness     String?\n  billToName       String\n  billToEmail      String\n  billToAddress    String\n  billToPhone      String\n  billToMobile     String?\n  billToFax        String?\n  invoiceNumber    String\n  date             String\n  terms            String\n  lineItems        Json[]\n  taxData          Json\n  subtotal         Decimal\n  tax              Decimal\n  total            Decimal\n  balance          Decimal\n  signatureUrl     String\n  discountData     Json\n  templateColour   String\n  userEmail        String\n  selectedCurrency Json\n  notes            String\n}\n\nmodel ImageUpload {\n  id        Int      @id @default(autoincrement())\n  createdAt DateTime @default(now())\n  userEmail String\n  invoiceId String   @unique\n  url       String   @unique\n  fileId    String   @unique\n}\n",
-  "inlineSchemaHash": "d2d5321a7b0473295559c3d056c830dc0bf571caf7d6672713d1195d9b733d09",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"PRISMA_DATABASE_URL\")\n}\n\nmodel User {\n  id           String        @id @default(uuid())\n  createdAt    DateTime      @default(now())\n  email        String        @unique\n  password     String\n  subscription Subscription?\n  updatedAt    DateTime?     @updatedAt\n}\n\nmodel Invoice {\n  id               String   @id @default(uuid())\n  createdAt        DateTime @default(now())\n  invoiceId        String   @unique\n  invoiceTitle     String\n  fromName         String\n  fromEmail        String\n  fromAddress      String\n  fromPhone        String\n  fromBusiness     String?\n  billToName       String\n  billToEmail      String\n  billToAddress    String\n  billToPhone      String\n  billToMobile     String?\n  billToFax        String?\n  invoiceNumber    String\n  date             String\n  terms            String\n  lineItems        Json[]\n  taxData          Json\n  subtotal         Decimal\n  tax              Decimal\n  total            Decimal\n  balance          Decimal\n  signatureUrl     String\n  discountData     Json\n  templateColour   String\n  userEmail        String\n  selectedCurrency Json\n  notes            String\n}\n\nmodel ImageUpload {\n  id        String   @id @default(uuid())\n  createdAt DateTime @default(now())\n  userEmail String\n  invoiceId String   @unique\n  url       String   @unique\n  fileId    String   @unique\n}\n\nmodel Subscription {\n  id        String             @id @default(uuid())\n  userId    String             @unique\n  user      User               @relation(fields: [userId], references: [id])\n  plan      PlanStatus\n  status    SubscriptionStatus\n  startDate DateTime\n  endDate   DateTime?\n  renewedAt DateTime?\n  createdAt DateTime           @default(now())\n  updatedAt DateTime           @updatedAt\n}\n\nenum SubscriptionStatus {\n  ACTIVE\n  EXPIRED\n  CANCELED\n}\n\nenum PlanStatus {\n  MONTHLY\n  ANNUAL\n}\n",
+  "inlineSchemaHash": "bcbb11201b2313b6168a5be4724a0713e31aa94c8cf3a3c82d3755a52c71992e",
   "copyEngine": false
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Invoice\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"invoiceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoiceTitle\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromPhone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromBusiness\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToPhone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToMobile\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToFax\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoiceNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"terms\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lineItems\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"taxData\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"subtotal\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"tax\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"total\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"balance\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"signatureUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"discountData\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"templateColour\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"selectedCurrency\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"ImageUpload\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoiceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fileId\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subscription\",\"kind\":\"object\",\"type\":\"Subscription\",\"relationName\":\"SubscriptionToUser\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Invoice\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"invoiceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoiceTitle\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromPhone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromBusiness\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToPhone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToMobile\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billToFax\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoiceNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"terms\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lineItems\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"taxData\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"subtotal\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"tax\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"total\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"balance\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"signatureUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"discountData\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"templateColour\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"selectedCurrency\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"ImageUpload\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invoiceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fileId\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Subscription\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SubscriptionToUser\"},{\"name\":\"plan\",\"kind\":\"enum\",\"type\":\"PlanStatus\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"SubscriptionStatus\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"renewedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = undefined
 config.compilerWasm = undefined
