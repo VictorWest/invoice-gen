@@ -2,11 +2,10 @@
 import Header from "@/components/header";
 import { formatCurrency, formatDateDayMonth, generatePDF } from "@/utils/helpers";
 import { DiscountData, InvoiceData, LineItemType, TaxData, UploadedImage } from "@/utils/interfaces/interfaces";
-import { invoicePageRoute } from "@/utils/routeMap";
+import { invoicePageRoute, premiumPageRoute } from "@/utils/routeMap";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react";
-import { Providers } from "@/components/providers";
 import { CiPhone, CiMobile1 } from "react-icons/ci";
 import { LiaFaxSolid } from "react-icons/lia";
 import Button from "@/components/button";
@@ -17,6 +16,8 @@ import { sendInvoiceEmail } from "@/utils/resend";
 import DeleteModal from "@/components/delete-modal";
 import ConfirmDelete from "@/components/confirm-delete";
 import { UseInvoiceContext } from "@/context/InvoiceContext";
+import { FaStar } from "react-icons/fa";
+import { GetUserContext } from "@/context/UserContext";
 
 export default function PreviewInvoice(){
     const params = useParams()
@@ -30,6 +31,7 @@ export default function PreviewInvoice(){
     }, [id, router])
 
     const { handleSaveAsPDF, isDeleteModalOpen, openDeleteModal, closeDeleteModal } = UseInvoiceContext()
+    const { subscription } = GetUserContext()
 
     const [ selectedCurrency, setSelectedCurrency ] = useState({ name: "USD", symbol: "$" })
     const [ invoiceData, setInvoiceData ] = useState<InvoiceData>(defaultInvoiceData)
@@ -44,6 +46,7 @@ export default function PreviewInvoice(){
     const [ sendToEmailIsActive, setSendToEmailIsActive ] = useState(false)
     const [ inputIsInvalid, setInputIsInvalid ] = useState(false)
     const [ error, setError ] = useState("")     
+    const [ success, setSuccess ] = useState("")
     const [ emailSendIsLoading, setEmailSendIsLoading ] = useState(false) 
 
     useEffect(() => {
@@ -118,18 +121,32 @@ export default function PreviewInvoice(){
     const handleSendEmail = async () => {
         if (!EMAIL_REGEX.test(emailToSend)){
             setError("Please give a correct email")
+            setTimeout(() => setError(""), 2000)
         } else {
-            try {
+            if (subscription){
                 setEmailSendIsLoading(true)
+                setSuccess("")
                 setError("")
-                const data = await generatePDF(invoiceData, lineItems, selectedCurrency, discountData, taxData, uploadedImage, templateColour, true)
-                if (data?.filename && data?.base64){
-                    sendInvoiceEmail(emailToSend, invoiceData, selectedCurrency, data?.filename, data?.base64)
+
+                try {
+                    const data = await generatePDF(invoiceData, lineItems, selectedCurrency, discountData, taxData, uploadedImage, templateColour, true)
+                    if (data?.filename && data?.base64){
+                        try {
+                            await sendInvoiceEmail(emailToSend, invoiceData, selectedCurrency, data?.filename, data?.base64)
+                            setSuccess("Email sent to " + emailToSend)
+                            setTimeout(() => setSuccess(""), 2000)
+                        } catch (error) {
+                            console.log(error)
+                            setError("There was an unexpected error. Please try again")
+                        }
+                    }
+                } catch (error) {
+                    console.log(error)
+                } finally { 
+                    setEmailSendIsLoading(false)
                 }
-            } catch (error) {
-                console.log(error)
-            } finally { 
-                setEmailSendIsLoading(false)
+            } else {
+                router.push(premiumPageRoute)
             }
         }
     }
@@ -275,9 +292,10 @@ export default function PreviewInvoice(){
                             placeholder="example@example.com" 
                             inputIsInvalid={inputIsInvalid}
                         />
-                        <p className="text-xs text-red-600">{error}</p>
+                        <p className="text-xs text-red-600 mt-2">{error}</p>
+                        <p className="text-xs text-green-600 mt-2">{success}</p>
                     </div>
-                    <div onClick={handleSendEmail}><Button isLoading={emailSendIsLoading} bgColour="#000" textColour="#e7e5e4" title={<p className="w-full flex justify-center items-center font-bold">Send</p>} className="border border-stone-300 " /></div>
+                    <div onClick={handleSendEmail}><Button isLoading={emailSendIsLoading} bgColour="#000" textColour="#e7e5e4" title={<p className="w-full flex justify-center items-center font-bold gap-1">Send <FaStar className="text-[#D3AF37] text-lg" /></p>} className="border border-stone-300 " /></div>
                 </div>}
             </div>
         </>

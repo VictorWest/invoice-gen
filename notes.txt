@@ -1,0 +1,14 @@
+Details to be filled:
+** Customer
+- Fist name, Last Name (both = identifier)
+- Email
+- Phone
+- Street, City, State, ZIP, Country
+
+** Payment
+- Billing Address (Same as address ?)
+- Billing name (Same as name ?)
+- Card details 
+    - Number
+    - Exp Month
+    - Exp Year

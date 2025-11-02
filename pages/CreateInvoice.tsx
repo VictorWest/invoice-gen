@@ -221,7 +221,7 @@ export default function CreateInvoice(){
                             <div>
                             {uploadedImage ?
                                     <div className="relative">
-                                        <Image src={uploadedImage?.url} width={100} height={100} alt="Logo" />
+                                        <Image src={uploadedImage?.url} width={100} height={100} alt="Logo" className="w-auto h-auto" />
                                         <div onClick={() => handleDeleteImage(uploadedImage?.fileId)}><MdCancel className="absolute -top-3 -right-3 cursor-pointer hover:opacity-80" /></div>
                                     </div>
                                 :

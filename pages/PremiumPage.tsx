@@ -3,46 +3,59 @@ import Button from "@/components/button";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import HeaderContent from "@/components/header-content";
-// import { UseInvoiceContext } from "@/context/InvoiceContext";
 import { PlanStatus } from "@/generated/prisma";
-// import { loginPageRoute } from "@/utils/routeMap";
-// import { useRouter } from "next/navigation";
-// import { useSession } from "next-auth/react"
+import { invoicePageRoute, loginPageRoute } from "@/utils/routeMap";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react"
+import { GetUserContext } from "@/context/UserContext";
+import { useEffect } from "react";
+import Link from "next/link";
 
 export default function PremiumPage(){   
-    // const { data: session } = useSession()
-    // const router = useRouter()
+    const { data: session } = useSession()
+    const router = useRouter()
+
+    const { subscription, setReloadSubscription } = GetUserContext()
 
     const handleSubscriptionButton = async (plan: PlanStatus) => {
-        // if (!session){
-        //     router.push(loginPageRoute)
-        // } else {
-        //     try {
-        //         const response = await fetch('/api/subscription/create', {
-        //             method: "POST",
-        //             headers: {
-        //                 "Content-Type": "application/json"
-        //             },
-        //             body: JSON.stringify({ plan })
-        //         })
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // }
-        console.log(plan)
-    }
+        if (!session){
+            router.push(loginPageRoute)
+        } else {
+            try {
+                const response = await fetch('/api/subscription', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ plan })
+                })
 
+                if (response.ok){
+                    setReloadSubscription((prev: boolean) => !prev)
+                    router.push(invoicePageRoute)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+ 
     return (
         <div>
             <Header isPremium />
             <main className="mt-25 font-sans px-10 py-5 text-white space-y-10">
                 <div className="w-full *:flex *:justify-center space-y-3">
                     <div>
-                        <h1 className="font-serif text-5xl w-1/4 text-center">Upgrade to <span className="text-[#C6F121]">InvoiceGen+</span></h1>
+                        <h1 className="font-serif text-5xl w-1/4 text-center">
+                            {subscription ? <>♡ You are subscribed to <span className="text-[#C6F121]">InvoiceGen+</span></> : <>Upgrade to <span className="text-[#C6F121]">InvoiceGen+</span></>}
+                        </h1>
                     </div>
-                    <p className="font-serif text-stone-400 text-xs">Access premium features that save time, boost productivity, and keep your business ahead.</p>
+                    <p className="font-serif text-stone-400 text-xs">{subscription ? "As a premium subscriber, you’re equipped with advanced tools that help you save time, stay productive, and keep your business ahead." : "Access premium features that save time, boost productivity, and keep your business ahead."}</p>
+                    { subscription && <div className="mt-5 space-x-3">
+                        <Link href={invoicePageRoute}><Button bgColour="#C7F121" title={<p className="font-bold">Go to invoices</p>} /></Link>
+                    </div>}
                 </div>
-                <div className="flex items-center justify-center gap-20 my-20">
+                {!subscription && <div className="flex items-center justify-center gap-20 my-20">
                     <div className="flex flex-col justify-between bg-white text-black text-xl px-5 py-9 w-96 h-76 rounded-4xl">
                         <div className="font-bold">
                             <p>Monthly</p>
@@ -62,7 +75,7 @@ export default function PremiumPage(){
                         <p>Billed Annually</p>
                         <div onClick={() => handleSubscriptionButton("ANNUAL")}><Button textColour="white" bgColour="black" title="Subscribe Now" /></div>
                     </div>
-                </div>
+                </div>}
                 <HeaderContent />
             </main>
             <Footer />

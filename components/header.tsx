@@ -1,22 +1,28 @@
 "use client"
 import Link from "next/link";
-import { homePageRoute, invoicePageRoute, loginPageRoute, registerPageRoute } from "@/utils/routeMap";
+import { homePageRoute, invoicePageRoute, loginPageRoute, premiumPageRoute, registerPageRoute } from "@/utils/routeMap";
 import Logout from "./logout";
 import Button from "./button";
-import { UseInvoiceContext } from "@/context/InvoiceContext";
+import { useSession } from "next-auth/react";
+import { GetUserContext } from "@/context/UserContext";
 
 export default function Header({ isHome, isPremium }:{ isHome?: boolean, isPremium?: boolean }){
-    const { session } = UseInvoiceContext()
+    const { data: session } = useSession()
+    const { subscription } = GetUserContext()
 
     return(
         <header className="flex items-center justify-between *:w-70 px-10 py-5 w-full fixed top-0 bg-black/90 z-10">
-            <Link href={homePageRoute} className="font-bold text-xl">InvoiceGen</Link>
+            <div className="flex items-end gap-2">
+                <Link href={homePageRoute} className="font-bold text-xl">InvoiceGen</Link>
+                {subscription && <p className="font-bold text-[#d3af37] text-xs mb-auto">Premium</p>}
+            </div>
             {isHome && <div className="flex items-center gap-5 text-sm text-stone-200 *:border-b *:border-black *:hover:border-white *:cursor-pointer"> 
                 <p>Generate Invoice</p>
                 <p>Features</p>
                 <p>About</p>
             </div>}
             <div className="flex items-center gap-5 justify-end">
+                {!subscription && <Link href={premiumPageRoute}><Button textColour="black" bgColour="white" title={<div className="font-bold">Upgrade</div>} /></Link>}
                 {isPremium &&
                     <Link href={session ? invoicePageRoute : registerPageRoute}><Button bgColour="#C7F121" title={<p className="font-bold whitespace-nowrap">{session ? "Go to invoices" : "Get Started — For Free!"}</p>} /></Link>
                 }

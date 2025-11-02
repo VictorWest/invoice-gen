@@ -16,9 +16,9 @@ export default function HeaderContent(){
                 <div className="space-y-3 w-96">
                     <h2 className="font-bold text-2xl">Online Invoice Generator</h2>
                     <p className="text-sm">Create and manage invoices easily from any device, anytime. Your account stays synced, and your data is securely stored at all times.</p>
-                    <div className="uppercase text-lg hover:underline text-[#C7F121] flex items-center gap-2 cursor-pointer">Use invoicegen now <span><FaLongArrowAltRight /></span></div>
+                    <Link href={invoicePageRoute} className="uppercase text-lg hover:underline text-[#C7F121] flex items-center gap-2 cursor-pointer">Use invoicegen now <span><FaLongArrowAltRight /></span></Link>
                 </div>
-                <Image src="/images/invoice-user.jpg" width={550} height={300} alt="Person using invoice" className="rounded-4xl" />
+                <Image src="/images/invoice-user.jpg" width={550} height={300} alt="Person using invoice" className="rounded-4xl w-auto h-auto" />
             </div>
             <div className="my-30 space-y-30 *:w-full *:flex *:justify-center *:gap-20">
                 <div>
@@ -68,8 +68,8 @@ export default function HeaderContent(){
                 </div>
             </div>
             <div className="bg-[#C6F121] text-black h-96 flex flex-col items-center justify-center gap-5 rounded-4xl mb-30">
-                <p className="text-3xl font-bold">Get started for free</p>
-                <p className="text-xl">Send your first invoice right now (it&apos;s free!)</p>
+                <p className="text-3xl font-bold">{session ? "This is InvoiceGen" :"Get started for free"}</p>
+                <p className="text-xl">Send your next invoice and keep business moving.</p>
                 <Link href={session ? invoicePageRoute : registerPageRoute} className="uppercase px-5 py-3 cursor-pointer hover:opacity-90 bg-white font-bold flex justify-center items-center rounded-md gap-2 hover:bg-black hover:text-white">
                     <span className="truncate">{session ? "Go to invoices" : "Get Started"}</span>
                     <FaArrowTrendUp className="shrink-0" />
