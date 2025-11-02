@@ -2,12 +2,8 @@
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Button from "./button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { invoicePageRoute } from "@/utils/routeMap";
 
 export default function ConfirmDelete({ onClose, invoiceId }: { onClose: any, invoiceId: string }){
-    const router = useRouter()
-
     const [ isLoading, setIsLoading ] = useState(false)
 
     const handleDeleteInvoice = async () => {
@@ -29,7 +25,7 @@ export default function ConfirmDelete({ onClose, invoiceId }: { onClose: any, in
     }
 
     return (
-        <div className="flex flex-col gap-3 items-center justify-center">
+        <div className="flex flex-col gap-3 items-center justify-center h-72">
             <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center"><RiDeleteBin6Line className="text-red-500 text-xl" /></div>
             <h2 className="font-bold text-xl">Delete</h2>
             <p>Are you sure you want to delete?</p>

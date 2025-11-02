@@ -8,35 +8,44 @@ import { invoicePageRoute, loginPageRoute } from "@/utils/routeMap";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react"
 import { GetUserContext } from "@/context/UserContext";
-import { useEffect } from "react";
 import Link from "next/link";
+import Modal from "@/components/modal";
+import CreatePremiumPage from "@/components/create-premium-account";
+import { useState } from "react";
 
 export default function PremiumPage(){   
     const { data: session } = useSession()
     const router = useRouter()
 
-    const { subscription, setReloadSubscription } = GetUserContext()
+    const { subscription } = GetUserContext()
+
+    const [ plan, setPlan ] = useState("")
+    const [ createModalIsOpen, setCreateModalIsOpen ] = useState(false)
+    const openCreateModal = () => setCreateModalIsOpen(true)
+    const closeCreateModal = () => setCreateModalIsOpen(false)
 
     const handleSubscriptionButton = async (plan: PlanStatus) => {
         if (!session){
             router.push(loginPageRoute)
         } else {
-            try {
-                const response = await fetch('/api/subscription', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ plan })
-                })
+            setPlan(plan)
+            openCreateModal()
+            // try {
+            //     const response = await fetch('/api/subscription', {
+            //         method: "POST",
+            //         headers: {
+            //             "Content-Type": "application/json"
+            //         },
+            //         body: JSON.stringify({ plan })
+            //     })
 
-                if (response.ok){
-                    setReloadSubscription((prev: boolean) => !prev)
-                    router.push(invoicePageRoute)
-                }
-            } catch (error) {
-                console.log(error)
-            }
+            //     if (response.ok){
+            //         setReloadSubscription((prev: boolean) => !prev)
+            //         router.push(invoicePageRoute)
+            //     }
+            // } catch (error) {
+            //     console.log(error)
+            // }
         }
     }
  
@@ -75,6 +84,9 @@ export default function PremiumPage(){
                         <p>Billed Annually</p>
                         <div onClick={() => handleSubscriptionButton("ANNUAL")}><Button textColour="white" bgColour="black" title="Subscribe Now" /></div>
                     </div>
+                    <Modal isOpen={createModalIsOpen} onClose={closeCreateModal}>
+                        <CreatePremiumPage onClose={closeCreateModal} plan={plan} />
+                    </Modal>
                 </div>}
                 <HeaderContent />
             </main>

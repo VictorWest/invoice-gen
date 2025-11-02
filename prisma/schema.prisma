@@ -72,7 +72,6 @@ model ImageUpload {
   fileId    String      @unique
 }
 
-
 enum SubscriptionStatus {
   ACTIVE
   EXPIRED

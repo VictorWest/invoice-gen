@@ -13,7 +13,7 @@ import Link from "next/link";
 import { defaultInvoiceData, EMAIL_REGEX } from "@/utils/data";
 import Input from "@/components/input";
 import { sendInvoiceEmail } from "@/utils/resend";
-import DeleteModal from "@/components/delete-modal";
+import Modal from "@/components/modal";
 import ConfirmDelete from "@/components/confirm-delete";
 import { UseInvoiceContext } from "@/context/InvoiceContext";
 import { FaStar } from "react-icons/fa";
@@ -275,9 +275,9 @@ export default function PreviewInvoice(){
                             <div onClick={() => router.push(invoicePageRoute)}><Button bgColour="#e7e5e4" title="Close Invoice" className="border border-stone-300" /></div>
                             <div onClick={openDeleteModal}><Button bgColour="#991B1B" textColour="#fff" title="Delete Invoice" className="" /></div>
                         </div>
-                        <DeleteModal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
+                        <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
                             <ConfirmDelete onClose={closeDeleteModal} invoiceId={invoiceData?.invoiceId} />
-                        </DeleteModal>
+                        </Modal>
                     </div>
                 </div>
                 {sendToEmailIsActive && <div className="w-1/4 mt-20 mr-10 space-y-5">

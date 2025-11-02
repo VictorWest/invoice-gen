@@ -3,7 +3,7 @@
 import { UseInvoiceContext } from "@/context/InvoiceContext"
 import { invoicePageRoute } from "@/utils/routeMap"
 import Link from "next/link"
-import DeleteModal from "./delete-modal"
+import DeleteModal from "./modal"
 import ConfirmDelete from "./confirm-delete"
 
 export default function InvoiceOptions({ invoiceData } : { invoiceData: any }){

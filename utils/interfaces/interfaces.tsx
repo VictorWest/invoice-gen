@@ -54,3 +54,19 @@ export interface UploadedImage {
     fileId: string, 
     invoiceId: string
 }
+
+export interface PaymentDetails {
+  firstName: string,
+  lastName: string,
+  email: string,
+  streetName: string,
+  city: string,
+  state: string,
+  country: string,
+  zip: string,
+  billingAddress: string,
+  billingName: string,
+  cardNumber: string,
+  expiryMonth: string,
+  expiryYear: string
+}
