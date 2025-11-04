@@ -59,6 +59,7 @@ export interface PaymentDetails {
   firstName: string,
   lastName: string,
   email: string,
+  mobileNumber: string,
   streetName: string,
   city: string,
   state: string,

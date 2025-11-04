@@ -1,5 +1,6 @@
 import jsPDF from "jspdf";
 import { DiscountData, InvoiceData, LineItemType, TaxData, UploadedImage } from "./interfaces/interfaces";
+import { months } from "./data";
 
 export function formatCurrency(number: number, currency: string = "$") {
     const isNegative = number < 0;
@@ -17,7 +18,6 @@ export function formatCurrency(number: number, currency: string = "$") {
     return isNegative ? `-${currency}${formattedNumber}` : `${currency}${formattedNumber}`;
 }
 
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 export function formatDateDayMonth(timestamp: string | Date){
     timestamp = timestamp.toLocaleString()

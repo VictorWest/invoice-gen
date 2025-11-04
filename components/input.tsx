@@ -13,7 +13,7 @@ const Input = forwardRef<HTMLInputElement, CustomInputProps>(({type, label, plac
         <div className="flex items-center gap-5 text-xs">
             {label && <p className="w-20">{label}</p>}
             <input 
-                style={{ borderColor: inputIsInvalid ? "#FF2C2C" : "#a6a09b" }} 
+                style={{ borderColor: inputIsInvalid ? "#c00000" : "#a6a09b" }} 
                 ref={ref}
                 type={type || "text"}
                 className={`px-2 py-3 bg-white rounded-md outline-0 border w-full ${className}`} 

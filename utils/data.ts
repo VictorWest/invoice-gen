@@ -1,5 +1,7 @@
 import { InvoiceData, PaymentDetails } from "./interfaces/interfaces";
 
+export const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 export const invoiceTermsOptions = ["None", "Custom", "On Receipt", "Next Day", "2 Days","3 Days","4 Days","5 Days","6 Days","7 Days","10 Days","14 Days","21 Days","30 Days","45 Days","60 Days","90 Days","120 Days","180 Days","365 Days"] as const
 export type InvoiceTerms = typeof invoiceTermsOptions[number]
 
@@ -17,6 +19,8 @@ export enum PlanStatus {
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/
 export const MOBILE_NUMBER_REGEX = /^(?:\+1\s?)?(?:\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/
 export const PASSWORD_REGEX = /^.{8,}$/
+export const ZIP_REGEX = /^\d{4,10}$/
+export const CARD_REGEX = /^(?:\d[ -]*?){13,16}$/
 
 export const currencies = [
   { name: "USD", symbol: "$" },
@@ -387,6 +391,7 @@ export const defaultPaymentDetails: PaymentDetails = {
   firstName: "",
   lastName: "",
   email: "",
+  mobileNumber: "",
   streetName: "",
   city: "",
   state: "",
@@ -398,3 +403,6 @@ export const defaultPaymentDetails: PaymentDetails = {
   expiryMonth: "",
   expiryYear: ""
 }
+
+const currentYear = new Date().getFullYear()
+export const years = Array.from({ length: 20 }, (_, i) => currentYear + i)
