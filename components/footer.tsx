@@ -3,7 +3,7 @@ import Link from "next/link";
 import Button from "./button";
 import { FaFacebook, FaLinkedin, FaTwitter ,FaYoutube } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
-import { loginPageRoute, registerPageRoute } from "@/utils/routeMap";
+import { invoicePageRoute, loginPageRoute, premiumPageRoute, registerPageRoute } from "@/utils/routeMap";
 import Logout from "./logout";
 import { useSession } from "next-auth/react";
 
@@ -28,16 +28,23 @@ export default function Footer(){
                         <Button textColour="white" bgColour="black" title={<div className="font-bold">{session ? <Logout /> : <Link href={registerPageRoute}>Get Started</Link>}</div>} />
                     </div>
                 </div>
-                <div className="flex gap-10 *:space-y-3 **:cursor-pointer *:*:hover:underline">
+                <div className="flex gap-10 *:space-y-3 *:flex *:flex-col **:cursor-pointer *:*:hover:underline">
                     <div>
                         <p>Home</p>
                         <p>About</p>
                         <p>Contact</p>
                     </div>
                     <div> 
-                        <p>Generate Invoice</p>
+                        <Link href={invoicePageRoute}>Generate Invoice</Link>
                         <p>Features</p>
-                        <Link href={loginPageRoute} className="flex items-center gap-1">Login <MdArrowOutward /></Link>
+                        {session ? 
+                            <Logout />
+                            :
+                            <Link href={loginPageRoute} className="flex items-center gap-1">Login <MdArrowOutward /></Link>
+                        }
+                    </div>
+                    <div>
+                        <Link href={premiumPageRoute}>Go to Premium Page</Link>
                     </div>
                 </div>
                 <div></div>

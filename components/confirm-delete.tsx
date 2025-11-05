@@ -25,7 +25,7 @@ export default function ConfirmDelete({ onClose, invoiceId }: { onClose: any, in
     }
 
     return (
-        <div className="flex flex-col gap-3 items-center justify-center h-72">
+        <div className="w-full flex flex-col gap-3 items-center justify-center h-72 text-black">
             <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center"><RiDeleteBin6Line className="text-red-500 text-xl" /></div>
             <h2 className="font-bold text-xl">Delete</h2>
             <p>Are you sure you want to delete?</p>

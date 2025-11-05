@@ -9,12 +9,15 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(uuid())
-  createdAt     DateTime      @default(now())
-  email         String        @unique
-  password      String
-  subscription  Subscription?
-  updatedAt     DateTime?     @updatedAt
+  id                           String        @id @default(uuid())
+  createdAt                    DateTime      @default(now())
+  email                        String        @unique
+  password                     String
+  acceptBluecustomerID         Int?
+  acceptBluepaymentMethodID    Int?
+  acceptBlueRecurringPaymentID Int?
+  subscription                 Subscription?
+  updatedAt                    DateTime?     @updatedAt
 }
 
 model Subscription {
@@ -80,5 +83,5 @@ enum SubscriptionStatus {
 
 enum PlanStatus {
   MONTHLY
-  ANNUAL
+  ANNUALLY
 }

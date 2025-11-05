@@ -12,6 +12,7 @@ import Link from "next/link";
 import Modal from "@/components/modal";
 import CreatePremiumPage from "@/components/create-premium-account";
 import { useState } from "react";
+import ConfirmCancelPremium from "@/components/confirm-cancel-premium";
 
 export default function PremiumPage(){   
     const { data: session } = useSession()
@@ -19,10 +20,15 @@ export default function PremiumPage(){
 
     const { subscription } = GetUserContext()
 
-    const [ plan, setPlan ] = useState("")
+    const [ plan, setPlan ] = useState<PlanStatus>("MONTHLY")
     const [ createModalIsOpen, setCreateModalIsOpen ] = useState(false)
+    const [ confirmModalIsOpen, setConfirmModalIsOpen ] = useState(false)
+
     const openCreateModal = () => setCreateModalIsOpen(true)
     const closeCreateModal = () => setCreateModalIsOpen(false)
+
+    const openConfirmModal = () => setConfirmModalIsOpen(true)
+    const closeConfirmModal = () => setConfirmModalIsOpen(false)
 
     const handleSubscriptionButton = async (plan: PlanStatus) => {
         if (!session){
@@ -30,22 +36,6 @@ export default function PremiumPage(){
         } else {
             setPlan(plan)
             openCreateModal()
-            // try {
-            //     const response = await fetch('/api/subscription', {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json"
-            //         },
-            //         body: JSON.stringify({ plan })
-            //     })
-
-            //     if (response.ok){
-            //         setReloadSubscription((prev: boolean) => !prev)
-            //         router.push(invoicePageRoute)
-            //     }
-            // } catch (error) {
-            //     console.log(error)
-            // }
         }
     }
  
@@ -56,12 +46,13 @@ export default function PremiumPage(){
                 <div className="w-full *:flex *:justify-center space-y-3">
                     <div>
                         <h1 className="font-serif text-5xl w-1/4 text-center">
-                            {subscription ? <>♡ You are subscribed to <span className="text-[#C6F121]">InvoiceGen+</span></> : <>Upgrade to <span className="text-[#C6F121]">InvoiceGen+</span></>}
+                            {session && subscription ? <>♡ You are subscribed to <span className="text-[#C6F121]">InvoiceGen+</span></> : <>Upgrade to <span className="text-[#C6F121]">InvoiceGen+</span></>}
                         </h1>
                     </div>
                     <p className="font-serif text-stone-400 text-xs">{subscription ? "As a premium subscriber, you’re equipped with advanced tools that help you save time, stay productive, and keep your business ahead." : "Access premium features that save time, boost productivity, and keep your business ahead."}</p>
-                    { subscription && <div className="mt-5 space-x-3">
+                    {session && subscription && <div className="mt-5 space-x-3 flex flex-row-reverse items-center gap-5">
                         <Link href={invoicePageRoute}><Button bgColour="#C7F121" title={<p className="font-bold">Go to invoices</p>} /></Link>
+                        <div onClick={() => openConfirmModal()}><Button bgColour="#fff" className="opacity-80" title={<p className="font-bold">Cancel Premium</p>} /></div>
                     </div>}
                 </div>
                 {!subscription && <div className="flex items-center justify-center gap-20 my-20">
@@ -82,12 +73,15 @@ export default function PremiumPage(){
                             </div>
                         </div>
                         <p>Billed Annually</p>
-                        <div onClick={() => handleSubscriptionButton("ANNUAL")}><Button textColour="white" bgColour="black" title="Subscribe Now" /></div>
+                        <div onClick={() => handleSubscriptionButton("ANNUALLY")}><Button textColour="white" bgColour="black" title="Subscribe Now" /></div>
                     </div>
-                    <Modal isOpen={createModalIsOpen} onClose={closeCreateModal}>
-                        <CreatePremiumPage onClose={closeCreateModal} plan={plan} />
+                    <Modal key="create" isOpen={createModalIsOpen} onClose={closeCreateModal}>
+                        <CreatePremiumPage plan={plan} />
                     </Modal>
                 </div>}
+                <Modal key="confirm" isOpen={confirmModalIsOpen} onClose={closeConfirmModal}>
+                    <ConfirmCancelPremium onClose={closeConfirmModal} />
+                </Modal>
                 <HeaderContent />
             </main>
             <Footer />

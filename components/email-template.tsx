@@ -1,3 +1,4 @@
+import { PlanStatus } from "@/generated/prisma";
 import * as React from "react";
 
 interface EmailTemplateProps {
@@ -12,7 +13,12 @@ interface EmailTemplateProps {
   totalAmount: string | number;
 }
 
-export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
+interface WelcomeEmailProps {
+  name: string;
+  planName: PlanStatus
+}
+
+export const InvoiceEmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   billToName,
   companyName,
   companyEmail,
@@ -94,6 +100,87 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
         <p style={{ fontSize: "12px", color: "#999" }}>
           This email was sent automatically from {companyName}’s invoicing
           system.
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
+export const WelcomePremiumEmailTemplate: React.FC<Readonly<WelcomeEmailProps>> = ({
+  name,
+  planName,
+}) => (
+  <div
+    style={{
+      backgroundColor: "#f5f7fa",
+      padding: "40px",
+      fontFamily: "Arial, sans-serif",
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#ffffff",
+        padding: "30px",
+        borderRadius: "8px",
+        maxWidth: "600px",
+        margin: "auto",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+      }}
+    >
+      <h1 style={{ fontSize: "22px", marginBottom: "15px", color: "#111" }}>
+        Welcome to InvoiceGen Premium!
+      </h1>
+
+      <p style={{ marginBottom: "15px", color: "#333" }}>Hi {name},</p>
+
+      <p style={{ marginBottom: "15px", color: "#333" }}>
+        We’re thrilled to have you onboard as a Premium member! You’ve
+        successfully subscribed to our <strong>{planName === "ANNUALLY" ? "ANNUAL" : planName} plan.</strong>.  
+      </p>
+
+      <div
+        style={{
+          backgroundColor: "#f4f4f4",
+          padding: "15px",
+          borderRadius: "6px",
+          margin: "20px 0",
+        }}
+      >
+        <p style={{ margin: 0, fontSize: "14px", color: "#333" }}>
+          As a Premium user, you now have access to exclusive features,
+          priority support, and regular updates to enhance your experience.
+        </p>
+      </div>
+
+      <p style={{ marginBottom: "15px", color: "#333" }}>
+        You can start exploring your Premium benefits right away by logging into
+        your account. We’re confident you’ll love what’s ahead!
+      </p>
+
+      <p style={{ marginBottom: "15px", color: "#333" }}>
+        If you ever have questions or need assistance, simply reply to this
+        email — we’re here to help.
+      </p>
+
+      <p style={{ marginTop: "20px", marginBottom: "5px", color: "#333" }}>
+        Welcome once again to the Premium family!
+      </p>
+
+      <p style={{ fontWeight: "bold", margin: 0, color: "#000" }}>
+        The InvoiceGen Team
+      </p>
+
+      <div
+        style={{
+          borderTop: "1px solid #ddd",
+          marginTop: "25px",
+          paddingTop: "10px",
+          textAlign: "center",
+        }}
+      >
+        <p style={{ fontSize: "12px", color: "#999" }}>
+          This email was sent automatically from InvoiceGen’s subscription
+          system. Thank you for choosing us!
         </p>
       </div>
     </div>

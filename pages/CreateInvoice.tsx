@@ -16,7 +16,6 @@ import ColourBlock from "@/components/colour-block";
 import Header from "@/components/header";
 import { useParams, useRouter } from "next/navigation";
 import { invoicePageRoute } from "@/utils/routeMap";
-import { Providers } from "@/components/providers";
 
 export default function CreateInvoice(){
     const params = useParams()
@@ -134,11 +133,7 @@ export default function CreateInvoice(){
 
         if (discountData?.type === "Percent"){
             tax = lineItems.filter((item: any) => item.tax).reduce((acc: any, item: any) => acc + ((taxData?.rate / 100) *(item.amount - ((discountData?.amount / 100) * item.amount))), 0)
-        } 
-        // else if (discountData?.type === "Flat Amount"){
-        //     tax = lineItems.filter(item => item.tax).reduce((acc, item) => acc + ((taxData?.rate / 100) * item.amount), 0) - discountData?.amount
-        // } 
-        else {
+        } else {
             tax = lineItems.filter((item: any) => item.tax).reduce((acc: any, item: any) => acc + ((taxData?.rate / 100) * item.amount), 0)
         }
 

@@ -8,14 +8,22 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import { IoCheckbox } from "react-icons/io5";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import Oval from "react-loading-icons/dist/esm/components/oval";
+import { useRouter } from "next/navigation";
+import { invoicePageRoute } from "@/utils/routeMap";
+import { GetUserContext } from "@/context/UserContext";
+import { sendSubscriptionConfirmationEmail } from "@/utils/resend";
+import { PlanStatus } from "@/generated/prisma";
 
-export default function CreatePremiumPage({ onClose, plan }: { onClose: any, plan: string }){
+export default function CreatePremiumPage({ plan }: { plan: PlanStatus }){
+    const router = useRouter()
+    const { setReloadSubscription } = GetUserContext()
+
     const [ paymentDetails, setPaymentDetails ] = useState<PaymentDetails>(defaultPaymentDetails)
-
     const [ error, setError ] = useState("")
     const [ billingIsSame, setBillingIsSame ] = useState(false)
     const [ inputIsInvalid, setInputIsInvalid ] = useState({ firstName: false, lastName: false, email: false, streetName: false, city: false, state: false, country: false, zip: false, mobileNumber: false, billingAddress: false, billingName: false, cardNumber: false, expiryMonth: false, expiryYear: false })
     const [ isLoading, setIsLoading ] = useState(false)
+    const [ onSuccess, setOnSuccess ] = useState(false)
 
     useEffect(() => {
         if (billingIsSame){
@@ -61,11 +69,19 @@ export default function CreatePremiumPage({ onClose, plan }: { onClose: any, pla
                     },
                     body: JSON.stringify({ paymentDetails, plan })
                 })
+                const data = await response.json()
+
                 if (!response.ok){
-                    setError("The card number entered is invalid.")
+                    setError(data.message || "An unknown error occurred.")
+                } else {
+                    setOnSuccess(true)
+                    setReloadSubscription((prev: boolean) => !prev)
+                    await sendSubscriptionConfirmationEmail(paymentDetails?.email, paymentDetails?.firstName, plan)
+                    router.push(invoicePageRoute)
                 }
             } catch (error) {
-                console.log(error)
+                console.error("Network error:", error);
+                setError("Unable to connect to server. Please try again.");
             } finally {
                 setIsLoading(false)
             }
@@ -77,8 +93,8 @@ export default function CreatePremiumPage({ onClose, plan }: { onClose: any, pla
 
     return(
         <div className="text-black w-full h-120 overflow-y-scroll">
-            <h1 className="text-start text-xl font-bold">Edit payment details</h1>
-            <div className="mt-7 space-y-3">
+            {!onSuccess && <h1 className="text-start text-xl font-bold">Edit payment details</h1>}
+            {!onSuccess && <div className="mt-7 space-y-3">
                 <p className="text-xs">Customer details</p>
                 <div className="flex items-center gap-5 *:w-full">
                     <Input inputIsInvalid={inputIsInvalid?.firstName} value={paymentDetails?.firstName} onChange={(e) => setPaymentDetails((prev: PaymentDetails) => ({...prev, firstName: e.target.value}))} placeholder="First Name" />
@@ -161,7 +177,14 @@ export default function CreatePremiumPage({ onClose, plan }: { onClose: any, pla
                         {isLoading ? <Oval height={20} width={20} speed={.5} stroke="#2148C0" /> : <>Make Payment <FaLongArrowAltRight /></>}
                     </p>} />
                 </div>
-            </div>
+            </div>}
+
+            {onSuccess && <div className="h-full flex flex-col items-center justify-center gap-3">
+                <span><svg width="25" height="25" viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="26.4987" cy="26.5001" r="25.5968" fill="url(#paint0_linear_6057_932)"/><path d="M38.7793 18.0479L22.9107 33.9164L15.6978 26.7034" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/><defs><linearGradient id="paint0_linear_6057_932" x1="4.23807" y1="85.9213" x2="95.9479" y2="75.8243" gradientUnits="userSpaceOnUse"><stop stopColor="#009689"/><stop offset="1" stopColor="#05DF72"/></linearGradient></defs></svg></span>
+                <div className="text-2xl font-bold">Success!</div> 
+                <p className="font-semibold">Welcome to InvoicGen+</p>
+                <p className="text-xs">Redirecting you to your invoices in </p>
+            </div>}
         </div>
     )
 }
