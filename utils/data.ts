@@ -20,7 +20,7 @@ export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/
 export const MOBILE_NUMBER_REGEX = /^(?:\+1\s?)?(?:\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/
 export const PASSWORD_REGEX = /^.{8,}$/
 export const ZIP_REGEX = /^\d{4,10}$/
-export const CARD_REGEX = /^(?:\d[ -]*?){13,16}$/
+export const CARD_REGEX = /^(?:\d[ -]*?){14,16}$/
 
 export const currencies = [
   { name: "USD", symbol: "$" },

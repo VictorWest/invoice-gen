@@ -7,6 +7,7 @@ import { CARD_REGEX, countries, defaultPaymentDetails, EMAIL_REGEX, MOBILE_NUMBE
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { IoCheckbox } from "react-icons/io5";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
+import Oval from "react-loading-icons/dist/esm/components/oval";
 
 export default function CreatePremiumPage({ onClose, plan }: { onClose: any, plan: string }){
     const [ paymentDetails, setPaymentDetails ] = useState<PaymentDetails>(defaultPaymentDetails)
@@ -14,6 +15,7 @@ export default function CreatePremiumPage({ onClose, plan }: { onClose: any, pla
     const [ error, setError ] = useState("")
     const [ billingIsSame, setBillingIsSame ] = useState(false)
     const [ inputIsInvalid, setInputIsInvalid ] = useState({ firstName: false, lastName: false, email: false, streetName: false, city: false, state: false, country: false, zip: false, mobileNumber: false, billingAddress: false, billingName: false, cardNumber: false, expiryMonth: false, expiryYear: false })
+    const [ isLoading, setIsLoading ] = useState(false)
 
     useEffect(() => {
         if (billingIsSame){
@@ -21,7 +23,7 @@ export default function CreatePremiumPage({ onClose, plan }: { onClose: any, pla
         }
     }, [billingIsSame, paymentDetails.billingAddress, paymentDetails.billingName, paymentDetails.firstName, paymentDetails.lastName, paymentDetails.city, paymentDetails.state, paymentDetails.country])
 
-    const handleSubmitDetails = () => {
+    const handleSubmitDetails = async () => {
         const newValidationState: any = {}
 
         Object.entries(paymentDetails).forEach(([key, value]) => {
@@ -50,7 +52,23 @@ export default function CreatePremiumPage({ onClose, plan }: { onClose: any, pla
 
         if (allValid) {
             setError("")
-            console.log("✅ All inputs are valid, proceed with submission");
+            setIsLoading(true)
+            try {
+                const response = await fetch("/api/subscription", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ paymentDetails, plan })
+                })
+                if (!response.ok){
+                    setError("The card number entered is invalid.")
+                }
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setIsLoading(false)
+            }
         } else {
             setError("All inputs must be accurately provided")
             console.log("Theres an error");
@@ -139,7 +157,9 @@ export default function CreatePremiumPage({ onClose, plan }: { onClose: any, pla
                 </div>
                 <p className="text-red-500 text-xs">{error}</p>
                 <div className="mt-7 " onClick={handleSubmitDetails}>
-                    <Button bgColour="#000" title={<p className="flex items-center text-white gap-2 font-semibold">Make Payment <FaLongArrowAltRight /></p>} />
+                    <Button bgColour="#000" title={<p className="flex items-center text-white gap-2 font-semibold">
+                        {isLoading ? <Oval height={20} width={20} speed={.5} stroke="#2148C0" /> : <>Make Payment <FaLongArrowAltRight /></>}
+                    </p>} />
                 </div>
             </div>
         </div>

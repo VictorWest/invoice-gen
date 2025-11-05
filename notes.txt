@@ -1,14 +1,44 @@
-Details to be filled:
-** Customer
-- Fist name, Last Name (both = identifier)
-- Email
-- Phone
-- Street, City, State, ZIP, Country
+Workflow:
 
-** Payment
-- Billing Address (Same as address ?)
-- Billing name (Same as name ?)
-- Card details 
-    - Number
-    - Exp Month
-    - Exp Year
+1. Create new customer. Extract customer ID from output POST https://api.sandbox.accept.blue/api/v2/customers
+{
+  "identifier": "Victor West",
+  "customer_number": "CUS-001",
+  "first_name": "Victor",
+  "last_name": "West",
+  "email": "victor@example.com",
+  "phone": "08012345678",
+  "billing_info": {
+    "street": "21 Market Road",
+    "city": "Yenagoa",
+    "state": "BY",
+    "zip": "560001",
+    "country": "NG"
+  },
+  "active": true
+}
+2. Create a new payment method using customer ID POST https://api.sandbox.accept.blue/api/v2/customers/{id}/payment-methods
+{
+"avs_address": "Yenagoa",
+"avs_zip": "560001",
+"name": "Victor West",
+"expiry_month": 12,
+"expiry_year": 2028,
+"card": "4111111111111111"
+}
+ i. if status == 409, payment method already exists. Extract payment_method ID
+ii. if status == 404, customer doesn't exist
+iii. if status == 201, extract id and customer_id,sending to next
+
+3. Create a new recurring payment, set next run date to next day POST https://api.sandbox.accept.blue/api/v2/customers/228929/recurring-schedules
+{
+  "title": "Monthly Premium Plan",
+  "frequency": "monthly",
+  "amount": 5.00,
+  "next_run_date": "2025-12-01",
+  "num_left": 0,
+  "payment_method_id": 38853,
+  "active": true,
+  "receipt_email": "victor@example.com",
+  "use_this_source_key": false
+}
