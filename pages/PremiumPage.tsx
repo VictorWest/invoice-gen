@@ -18,7 +18,7 @@ export default function PremiumPage(){
     const { data: session } = useSession()
     const router = useRouter()
 
-    const { subscription } = GetUserContext()
+    const { isSubscribed } = GetUserContext()
 
     const [ plan, setPlan ] = useState<PlanStatus>("MONTHLY")
     const [ createModalIsOpen, setCreateModalIsOpen ] = useState(false)
@@ -46,16 +46,16 @@ export default function PremiumPage(){
                 <div className="w-full *:flex *:justify-center space-y-3">
                     <div>
                         <h1 className="font-serif text-5xl w-1/4 text-center">
-                            {session && subscription ? <>♡ You are subscribed to <span className="text-[#C6F121]">InvoiceGen+</span></> : <>Upgrade to <span className="text-[#C6F121]">InvoiceGen+</span></>}
+                            {session && isSubscribed ? <>♡ You are subscribed to <span className="text-[#C6F121]">InvoiceGen+</span></> : <>Upgrade to <span className="text-[#C6F121]">InvoiceGen+</span></>}
                         </h1>
                     </div>
-                    <p className="font-serif text-stone-400 text-xs">{subscription ? "As a premium subscriber, you’re equipped with advanced tools that help you save time, stay productive, and keep your business ahead." : "Access premium features that save time, boost productivity, and keep your business ahead."}</p>
-                    {session && subscription && <div className="mt-5 space-x-3 flex flex-row-reverse items-center gap-5">
+                    <p className="font-serif text-stone-400 text-xs">{isSubscribed ? "As a premium subscriber, you’re equipped with advanced tools that help you save time, stay productive, and keep your business ahead." : "Access premium features that save time, boost productivity, and keep your business ahead."}</p>
+                    {session && isSubscribed && <div className="mt-5 space-x-3 flex flex-row-reverse items-center gap-5">
                         <Link href={invoicePageRoute}><Button bgColour="#C7F121" title={<p className="font-bold">Go to invoices</p>} /></Link>
                         <div onClick={() => openConfirmModal()}><Button bgColour="#fff" className="opacity-80" title={<p className="font-bold">Cancel Premium</p>} /></div>
                     </div>}
                 </div>
-                {!subscription && <div className="flex items-center justify-center gap-20 my-20">
+                {!isSubscribed && <div className="flex items-center justify-center gap-20 my-20">
                     <div className="flex flex-col justify-between bg-white text-black text-xl px-5 py-9 w-96 h-76 rounded-4xl">
                         <div className="font-bold">
                             <p>Monthly</p>

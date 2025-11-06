@@ -1,5 +1,5 @@
 "use server"
-import { InvoiceEmailTemplate, WelcomePremiumEmailTemplate } from "@/components/email-template"
+import { GoodbyePremiumEmailTemplate, InvoiceEmailTemplate, WelcomePremiumEmailTemplate } from "@/components/email-template"
 import { Resend } from "resend"
 import { InvoiceData } from "./interfaces/interfaces"
 import { formatDateDayMonth } from "./helpers"
@@ -42,16 +42,31 @@ export const sendInvoiceEmail = async (email: string, invoiceData: InvoiceData, 
     }
 }
 
-export const sendSubscriptionConfirmationEmail = async (email: string, customerName: string, planName: PlanStatus) => {
+type TypeOfSubscriptionMail = "confirmation" | "termination"
+
+export const sendSubscriptionEmail = async (email: string, customerName: string, planName: PlanStatus, typeOfMail: TypeOfSubscriptionMail) => {
     try {
+        const subject = typeOfMail === "confirmation" ? 
+            "Welcome to InvoiceGen Premium!"
+            : "Sorry to See You Go — InvoiceGen Premium"
+
+        const reactTemplate = 
+                typeOfMail === "confirmation" ? 
+                    await WelcomePremiumEmailTemplate({ 
+                        name: customerName,
+                        planName
+                    }) 
+                    : 
+                    await GoodbyePremiumEmailTemplate({ 
+                        name: customerName,
+                        planName
+                    })
+
         const { data, error } = await resend.emails.send({
             to: email,
             from: "InvoiceGen <customerservice@merchlyach.com>",
-            subject: "Welcome to InvoiceGen Premium!",
-            react: await WelcomePremiumEmailTemplate({ 
-                name: customerName,
-                planName
-            }),
+            subject,
+            react: reactTemplate
         })
 
         if (error) {
