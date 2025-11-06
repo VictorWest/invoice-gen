@@ -3,6 +3,7 @@
 import { GetUserContext } from "@/context/UserContext"
 import Button from "./button"
 import { useState } from "react"
+import { sendSubscriptionEmail } from "@/utils/resend"
 
 export default function ConfirmCancelPremium({ onClose }: { onClose: any }){
     const { setReloadSubscription } = GetUserContext()
@@ -16,7 +17,10 @@ export default function ConfirmCancelPremium({ onClose }: { onClose: any }){
             })
 
             if (response.ok){
+                const { email, customerName, planName } = await response.json()
+                
                 setReloadSubscription((prev: boolean) => !prev)
+                await sendSubscriptionEmail(email, customerName, planName, "termination")
                 onClose()
             }
         } catch (error) {

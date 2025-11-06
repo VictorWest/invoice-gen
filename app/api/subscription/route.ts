@@ -22,6 +22,7 @@ const paymentMethodRoute = (id: number) => `${customerRoute}/${id}/payment-metho
 const recurringPaymentRoute = (id: number) => `${customerRoute}/${id}/recurring-schedules`
 const cancelRecurringPaymentRoute = (id: number) => `https://api.sandbox.accept.blue/api/v2/recurring-schedules/${id}`
 
+// Get user subscription details
 export async function GET(){
     const session = await getServerSession()
     if (!session?.user?.email) return NextResponse.json({message: "User not found"}, {status: 400})
@@ -47,6 +48,7 @@ export async function GET(){
     return NextResponse.json({ data: response }, { status: 200 })
 }
 
+// Add a new subscription
 export async function POST(request: NextRequest){
     const session = await getServerSession()
     if (!session?.user?.email) return NextResponse.json({message: "User not found"}, {status: 400})
@@ -87,16 +89,39 @@ export async function POST(request: NextRequest){
 
                 plan == "MONTHLY" ? renewedAtDate.setDate(tomorrow.getDate() + 30) : plan === "ANNUALLY" && renewedAtDate.setDate(tomorrow.getDate() + 365)
 
-                await prisma.subscription.create({
-                    data: {
-                        userId: user.id,
-                        plan,
-                        status: "ACTIVE",
-                        startDate: tomorrow,
-                        renewedAt: renewedAtDate,
-                        endDate: renewedAtDate
+                const existingSubscription = await prisma.subscription.findFirst({
+                    where: {
+                        userId: user.id
                     }
                 })
+
+                if (existingSubscription){
+                    await prisma.subscription.update({
+                        where: { 
+                            userId: user.id
+                        },
+                        data: {
+                            customerName: `${paymentDetails?.firstName} ${paymentDetails?.lastName}`,
+                            plan,
+                            status: "ACTIVE",
+                            startDate: tomorrow,
+                            renewedAt: renewedAtDate,
+                            endDate: renewedAtDate
+                        }
+                    })
+                } else { 
+                    await prisma.subscription.create({
+                        data: {
+                            userId: user.id,
+                            customerName: `${paymentDetails?.firstName} ${paymentDetails?.lastName}`,
+                            plan,
+                            status: "ACTIVE",
+                            startDate: tomorrow,
+                            renewedAt: renewedAtDate,
+                            endDate: renewedAtDate
+                        }
+                    })
+                }
             } catch (error) {
                 console.error(error)
                 return NextResponse.json({ message: "There was an error creating your subscription."}, { status: 400 })
@@ -138,10 +163,11 @@ export async function DELETE(request: NextRequest){ // Cancel Subscription
             })
 
             if (!response.ok){
+                console.log(response)
                 return NextResponse.json({ message: "There was an unexpected error." }, { status: response.status })
             }
 
-            await prisma.subscription.update({
+            const subscription = await prisma.subscription.update({
                 where: {
                     userId: user.id
                 },
@@ -150,7 +176,7 @@ export async function DELETE(request: NextRequest){ // Cancel Subscription
                     renewedAt: null
                 }
             })
-            return NextResponse.json({ message: "Successfully cancelled subscription" }, { status: 200 })
+            return NextResponse.json({ email: user.email, customerName: subscription.customerName, planName: subscription.plan }, { status: 200 })
         } catch (error) {
             console.log(error)
             return NextResponse.json({ message: "There was an unexpected error." }, { status: 500 })
