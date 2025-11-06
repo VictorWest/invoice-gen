@@ -31,7 +31,7 @@ export default function PreviewInvoice(){
     }, [id, router])
 
     const { handleSaveAsPDF, isDeleteModalOpen, openDeleteModal, closeDeleteModal } = UseInvoiceContext()
-    const { subscription } = GetUserContext()
+    const { isSubscribed } = GetUserContext()
 
     const [ selectedCurrency, setSelectedCurrency ] = useState({ name: "USD", symbol: "$" })
     const [ invoiceData, setInvoiceData ] = useState<InvoiceData>(defaultInvoiceData)
@@ -123,7 +123,7 @@ export default function PreviewInvoice(){
             setError("Please give a correct email")
             setTimeout(() => setError(""), 2000)
         } else {
-            if (subscription){
+            if (isSubscribed){
                 setEmailSendIsLoading(true)
                 setSuccess("")
                 setError("")

@@ -11,7 +11,7 @@ import Oval from "react-loading-icons/dist/esm/components/oval";
 import { useRouter } from "next/navigation";
 import { invoicePageRoute } from "@/utils/routeMap";
 import { GetUserContext } from "@/context/UserContext";
-import { sendSubscriptionConfirmationEmail } from "@/utils/resend";
+import { sendSubscriptionEmail } from "@/utils/resend";
 import { PlanStatus } from "@/generated/prisma";
 
 export default function CreatePremiumPage({ plan }: { plan: PlanStatus }){
@@ -76,7 +76,7 @@ export default function CreatePremiumPage({ plan }: { plan: PlanStatus }){
                 } else {
                     setOnSuccess(true)
                     setReloadSubscription((prev: boolean) => !prev)
-                    await sendSubscriptionConfirmationEmail(paymentDetails?.email, paymentDetails?.firstName, plan)
+                    await sendSubscriptionEmail(paymentDetails?.email, paymentDetails?.firstName, plan, "confirmation")
                     router.push(invoicePageRoute)
                 }
             } catch (error) {

@@ -134,6 +134,7 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.SubscriptionScalarFieldEnum = {
   id: 'id',
+  customerName: 'customerName',
   userId: 'userId',
   plan: 'plan',
   status: 'status',
