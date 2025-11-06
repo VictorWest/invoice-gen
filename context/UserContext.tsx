@@ -7,6 +7,7 @@ const UserContext = createContext<any>(null)
 
 export const UserProvider = ({ children }: any) => {
     const [ subscription, setSubscription ] = useState<Subscription | null>(null)
+    const [ isSubscribed, setIsSubscribed ] = useState(true)
     const [ reloadSubscription, setReloadSubscription ] = useState(false)
 
     useEffect(() => {
@@ -23,10 +24,15 @@ export const UserProvider = ({ children }: any) => {
             }
         })()
     }, [reloadSubscription])
+
+    useEffect(() => {
+        setIsSubscribed(subscription?.status === "ACTIVE")
+    }, [subscription])
     
     return(
         <UserContext.Provider value={{
                                         subscription, setSubscription,
+                                        isSubscribed,
                                         setReloadSubscription
                                     }}>
             { children }
